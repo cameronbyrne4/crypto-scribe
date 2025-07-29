@@ -289,7 +289,7 @@ const LandingPage = () => {
                   <AccordionItem 
                     key={feature.id} 
                     value={feature.id}
-                    className="border-b border-white/10 last:border-b-0"
+                    className="border-b border-white/10"
                   >
                     <AccordionTrigger className="text-left hover:no-underline group [&>svg]:hidden">
                       <div className="flex items-center justify-between w-full">
@@ -327,13 +327,13 @@ const LandingPage = () => {
             {/* Right side - Feature preview */}
             <div className="relative h-full">
               {/* Mountain background image */}
-              <div className="absolute inset-0 rounded-2xl overflow-hidden border border-white/10">
+              <div className="absolute inset-0  overflow-hidden border border-white/10">
                 <img 
                   src="https://images.unsplash.com/photo-1511300636408-a63a89df3482?w=800&h=600&fit=crop&crop=center"
                   alt="Iceland mountain landscape"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+                <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" />
               </div>
               
               <div className="relative z-10 h-full flex items-center justify-center">
@@ -407,7 +407,7 @@ const LandingPage = () => {
                 <div className="relative h-full rounded-2xl border border-gray-700 p-2 md:rounded-3xl md:p-3">
                   <GlowingCardEffect
                     blur={0}
-                    borderWidth={3}
+                    borderWidth={2}
                     spread={70}
                     glow={true}
                     disabled={false}
@@ -446,49 +446,69 @@ const LandingPage = () => {
 
 
       {/* Footer */}
-      <footer className="py-16 border-t border-white/10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <footer className="py-12 border-t border-white/10 bg-black/[0.96]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Logo and Company */}
             <div>
-              <div className="flex items-center space-x-2 mb-6">
+              <div className="flex items-center space-x-2 mb-4">
                 <div className="relative">
-                  <div className="absolute inset-0 rounded-lg bg-gradient-primary blur-sm opacity-60"></div>
-                  <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-primary">
-                    <Database className="w-6 h-6 text-white" />
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#7c45eb] to-[#7c45eb] blur-sm opacity-60"></div>
+                  <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-[#7c45eb] to-[#7c45eb]">
+                    <Database className="w-5 h-5 text-white" />
                   </div>
                 </div>
-                <span className="text-xl font-bold gradient-text-primary">
+                <span className="text-lg font-bold text-white">
                   ChainQuery
                 </span>
               </div>
-              <p className="text-muted-foreground mb-6">
-                Making blockchain intelligence accessible to everyone through natural language queries.
-              </p>
               <p className="text-sm text-muted-foreground">
-                © 2025 ChainQuery. All rights reserved.
+                Making blockchain intelligence accessible to everyone through natural language queries.
               </p>
             </div>
             
+            {/* Company Links */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-              <div className="glass rounded-lg p-6">
-                <div className="flex items-start space-x-3">
-                  <Mail className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Have questions? We'd love to hear from you.
-                    </p>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => navigate("/contact")}
-                      className="border-primary/20 hover:border-primary/40"
-                    >
-                      Get in Touch
-                    </Button>
-                  </div>
-                </div>
+              <h3 className="text-sm font-semibold text-white mb-4">Company</h3>
+              <div className="space-y-2">
+                <a 
+                  href="/contact" 
+                  className="block text-sm text-muted-foreground hover:text-white transition-colors duration-200"
+                >
+                  Contact
+                </a>
+                <a 
+                  href="/pricing" 
+                  className="block text-sm text-muted-foreground hover:text-white transition-colors duration-200"
+                >
+                  Pricing
+                </a>
+                <a 
+                  href="/about" 
+                  className="block text-sm text-muted-foreground hover:text-white transition-colors duration-200"
+                >
+                  About
+                </a>
               </div>
+            </div>
+            
+            {/* Social and Copyright */}
+            <div className="flex flex-col justify-between">
+              <div className="flex justify-end mb-4">
+                <a 
+                  href="https://twitter.com/chainquery" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-white transition-colors duration-200"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                  </svg>
+                </a>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                © 2025 ChainQuery. All rights reserved.
+              </p>
             </div>
           </div>
         </div>
