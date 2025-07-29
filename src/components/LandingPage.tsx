@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useNavigate } from "react-router-dom";
+import Footer from "./Footer";
 import { 
   Search, 
   Shield, 
@@ -35,7 +36,6 @@ import {
   Lock,
   Plus
 } from "lucide-react";
-import RoboticEye from "./RoboticEye";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -258,8 +258,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Robotic Eye Section */}
-      <RoboticEye />
+
 
       {/* Features Section - GitHub Style */}
       <section className="py-20 bg-black/[0.96]" id="features">
@@ -278,7 +277,13 @@ const LandingPage = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
             {/* Left side - Feature list */}
-            <div className="space-y-1">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="space-y-1"
+            >
               <Accordion 
                 type="single" 
                 value={selectedFeature}
@@ -322,7 +327,7 @@ const LandingPage = () => {
                   </AccordionItem>
                 ))}
               </Accordion>
-            </div>
+            </motion.div>
 
             {/* Right side - Feature preview */}
             <div className="relative h-full">
@@ -374,7 +379,7 @@ const LandingPage = () => {
       </section>
 
       {/* Why Us Section */}
-      <section className="py-20 bg-black/[0.96]">
+      <section className="py-20 pb-32 bg-black/[0.96]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -445,74 +450,7 @@ const LandingPage = () => {
 
 
 
-      {/* Footer */}
-      <footer className="py-12 border-t border-white/10 bg-black/[0.96]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Logo and Company */}
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#7c45eb] to-[#7c45eb] blur-sm opacity-60"></div>
-                  <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-[#7c45eb] to-[#7c45eb]">
-                    <Database className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-                <span className="text-lg font-bold text-white">
-                  ChainQuery
-                </span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Making blockchain intelligence accessible to everyone through natural language queries.
-              </p>
-            </div>
-            
-            {/* Company Links */}
-            <div>
-              <h3 className="text-sm font-semibold text-white mb-4">Company</h3>
-              <div className="space-y-2">
-                <a 
-                  href="/contact" 
-                  className="block text-sm text-muted-foreground hover:text-white transition-colors duration-200"
-                >
-                  Contact
-                </a>
-                <a 
-                  href="/pricing" 
-                  className="block text-sm text-muted-foreground hover:text-white transition-colors duration-200"
-                >
-                  Pricing
-                </a>
-                <a 
-                  href="/about" 
-                  className="block text-sm text-muted-foreground hover:text-white transition-colors duration-200"
-                >
-                  About
-                </a>
-              </div>
-            </div>
-            
-            {/* Social and Copyright */}
-            <div className="flex flex-col justify-between">
-              <div className="flex justify-end mb-4">
-                <a 
-                  href="https://twitter.com/chainquery" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-white transition-colors duration-200"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                  </svg>
-                </a>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                © 2025 ChainQuery. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

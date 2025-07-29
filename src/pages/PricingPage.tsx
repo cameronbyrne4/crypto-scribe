@@ -11,10 +11,15 @@ import {
   ShrinkingMobileNavToggle,
   ShrinkingMobileNavMenu,
 } from "@/components/ui/shrinking-navbar";
-import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { GridBackground } from "@/components/ui/grid-background";
+import { GlowingCardEffect } from "@/components/ui/glowing-card-effect";
 import { Button } from "@/components/ui/button";
+import GradientButton from "@/components/ui/gradient-button";
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Switch } from "@/components/ui/switch";
+import Footer from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
 import { 
   CheckCircle, 
@@ -26,13 +31,17 @@ import {
   Download,
   Star,
   ArrowRight,
-  HelpCircle
+  HelpCircle,
+  Crown,
+  Sparkles,
+  Plus
 } from "lucide-react";
+import React from "react";
 
 const PricingPage = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isYearly, setIsYearly] = useState(false);
+
 
   const navItems = [
     {
@@ -53,7 +62,7 @@ const PricingPage = () => {
     {
       name: "Free",
       description: "Perfect for getting started",
-      price: { monthly: 0, yearly: 0 },
+      price: 0,
       features: [
         "2 queries per day",
         "Basic entity labeling",
@@ -68,12 +77,13 @@ const PricingPage = () => {
       ],
       icon: <Users className="w-6 h-6" />,
       isPopular: false,
-      ctaText: "Get Started Free"
+      ctaText: "Get Started Free",
+      gradient: "from-gray-500 to-gray-600"
     },
     {
       name: "Premium", 
       description: "For professionals and traders",
-      price: { monthly: 49, yearly: 490 },
+      price: 49,
       features: [
         "200 queries per month",
         "Advanced entity labeling",
@@ -86,14 +96,15 @@ const PricingPage = () => {
         "Real-time alerts (coming soon)"
       ],
       limitations: [],
-      icon: <Zap className="w-6 h-6" />,
+      icon: <Crown className="w-6 h-6" />,
       isPopular: true,
-      ctaText: "Start Premium"
+      ctaText: "Start Premium",
+      gradient: "from-[#7c45eb] to-[#9c65fb]"
     },
     {
       name: "Enterprise",
       description: "For teams and institutions",
-      price: { monthly: "Custom", yearly: "Custom" },
+      price: "Custom",
       features: [
         "Unlimited queries",
         "Custom entity labeling",
@@ -107,9 +118,10 @@ const PricingPage = () => {
         "Audit logs"
       ],
       limitations: [],
-      icon: <Shield className="w-6 h-6" />,
+      icon: <Sparkles className="w-6 h-6" />,
       isPopular: false,
-      ctaText: "Contact Sales"
+      ctaText: "Contact Sales",
+      gradient: "from-[#ecc48c] to-[#f4d4a4]"
     }
   ];
 
@@ -137,33 +149,25 @@ const PricingPage = () => {
   ];
 
   const getPrice = (plan: typeof plans[0]) => {
-    if (typeof plan.price.monthly === "string") return plan.price.monthly;
-    return isYearly ? plan.price.yearly : plan.price.monthly;
-  };
-
-  const getSavings = (plan: typeof plans[0]) => {
-    if (typeof plan.price.monthly === "string" || !isYearly || typeof plan.price.yearly === "string") return null;
-    const monthlyCost = plan.price.monthly * 12;
-    const savings = monthlyCost - plan.price.yearly;
-    return Math.round((savings / monthlyCost) * 100);
+    return plan.price;
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black/[0.96]">
       <ShrinkingNavbar>
         {/* Desktop Navigation */}
         <ShrinkingNavBody>
           <ShrinkingNavbarLogo />
           <ShrinkingNavItems items={navItems} />
-                      <div className="flex items-center gap-4">
-              <a
-                onClick={() => navigate("/auth/signin")}
-                className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-              >
-                Sign In
-              </a>
-              <ShrinkingNavbarButton variant="secondary" onClick={() => navigate("/auth/signup")}>Get Started</ShrinkingNavbarButton>
-            </div>
+          <div className="flex items-center gap-4">
+            <a
+              onClick={() => navigate("/auth/signin")}
+              className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+            >
+              Sign In
+            </a>
+            <ShrinkingNavbarButton variant="secondary" onClick={() => navigate("/auth/signup")}>Get Started</ShrinkingNavbarButton>
+          </div>
         </ShrinkingNavBody>
 
         {/* Mobile Navigation */}
@@ -216,119 +220,119 @@ const PricingPage = () => {
         </ShrinkingMobileNav>
       </ShrinkingNavbar>
       
-      <div className="pt-20 pb-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
+      {/* Hero Section */}
+      <section className="relative flex h-[30rem] w-full overflow-hidden bg-black/[0.96] antialiased md:items-center md:justify-center pt-20">
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black to-transparent z-10" />
+        <div
+          className="pointer-events-none absolute inset-0 [background-size:40px_40px] select-none"
+          style={{
+            backgroundImage: "linear-gradient(to_right,#171717_1px,transparent_1px),linear-gradient(to_bottom,#171717_1px,transparent_1px)"
+          }}
+        />
+        
+        <GridBackground />
+        
+        <div className="relative z-10 mx-auto w-full max-w-7xl p-4 pt-20 md:pt-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.8 }}
+            className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="gradient-text-primary">Simple, Transparent Pricing</span>
+            <h1 className="bg-opacity-50 bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-center text-4xl font-bold text-transparent md:text-6xl mb-6">
+              Simple, Transparent
+              <br />
+              <span className="bg-gradient-to-r from-[#7c45eb] to-[#9c65fb] bg-clip-text text-transparent">
+                Pricing
+              </span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            
+            <p className="mx-auto mt-4 max-w-2xl text-center text-lg font-normal text-neutral-300">
               Start free and scale as you grow. All plans include our core blockchain intelligence features.
             </p>
-            
-            {/* Billing Toggle */}
-            <div className="flex items-center justify-center space-x-4">
-              <span className={`text-sm ${!isYearly ? 'text-foreground' : 'text-muted-foreground'}`}>
-                Monthly
-              </span>
-              <Switch 
-                checked={isYearly} 
-                onCheckedChange={setIsYearly}
-                className="data-[state=checked]:bg-primary"
-              />
-              <span className={`text-sm ${isYearly ? 'text-foreground' : 'text-muted-foreground'}`}>
-                Yearly
-              </span>
-              {isYearly && (
-                <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
-                  Save 17%
-                </span>
-              )}
-            </div>
           </motion.div>
+        </div>
+      </section>
 
-          {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto mb-20">
+      {/* Pricing Cards Section */}
+      <section className="py-20 bg-black/[0.96]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {plans.map((plan, index) => {
               const price = getPrice(plan);
-              const savings = getSavings(plan);
               
               return (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
                   className="relative"
                 >
                   {plan.isPopular && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                      <div className="bg-gradient-primary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+                      <div className="bg-gradient-to-r from-[#7c45eb] to-[#9c65fb] text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
                         <Star className="w-4 h-4 mr-1" />
                         Most Popular
                       </div>
                     </div>
                   )}
                   
-                  <GlowingEffect 
-                    color={plan.isPopular ? "crypto" : "primary"}
-                    className="h-full"
-                  >
-                    <Card className="h-full border-0 bg-transparent">
-                      <CardHeader className="text-center pb-6">
-                        <div className="w-12 h-12 mx-auto mb-4 p-3 rounded-xl bg-primary/20">
-                          {plan.icon}
-                        </div>
-                        <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
-                        <CardDescription className="text-base">{plan.description}</CardDescription>
-                        
-                        <div className="mt-6">
-                          <div className="text-4xl font-bold">
-                            {typeof price === "string" ? price : `$${price}`}
-                            {typeof price === "number" && price > 0 && (
-                              <span className="text-lg text-muted-foreground font-normal">
-                                /{isYearly ? "year" : "month"}
-                              </span>
-                            )}
-                          </div>
-                          {savings && (
-                            <div className="text-sm text-primary mt-1">
-                              Save {savings}% annually
+                  <div className={`relative h-full rounded-2xl border p-2 md:rounded-3xl md:p-3 ${
+                    plan.isPopular 
+                      ? 'border-[#7c45eb]' 
+                      : 'border-gray-700'
+                  }`}>
+                    {/* Gray glow behind the card */}
+                    <div className="absolute inset-0 rounded-2xl bg-gray-500/20 blur-[9px] md:rounded-3xl" />
+                    
+                    {/* Black card with content */}
+                    <div className="relative bg-black rounded-xl p-6 md:p-6 md:rounded-2xl h-full">
+                      <div className="relative flex h-full flex-col">
+                        {/* Header */}
+                        <div className="text-center mb-8">
+                          <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
+                          <p className="text-neutral-400">{plan.description}</p>
+                          
+                          <div className="mt-6">
+                            <div className="text-4xl font-bold text-white">
+                              {typeof price === "string" ? price : `$${price}`}
+                              {typeof price === "number" && price > 0 && (
+                                <span className="text-lg text-neutral-400 font-normal">
+                                  /month
+                                </span>
+                              )}
                             </div>
-                          )}
+                          </div>
                         </div>
-                      </CardHeader>
-                      
-                      <CardContent className="pt-0">
-                        <Button 
-                          onClick={() => {
-                            if (plan.name === "Enterprise") {
-                              navigate("/contact");
-                            } else {
-                              navigate("/auth/signup");
-                            }
-                          }}
-                          variant={plan.isPopular ? "default" : "outline"}
-                          className={`w-full mb-6 ${plan.isPopular ? "bg-gradient-primary hover:opacity-80" : ""}`}
-                        >
-                          {plan.ctaText}
-                          <ArrowRight className="ml-2 w-4 h-4" />
-                        </Button>
                         
-                        <div className="space-y-4">
+                        {/* CTA Button */}
+                        <div className="mb-8">
+                          <GradientButton
+                            onClick={() => {
+                              if (plan.name === "Enterprise") {
+                                navigate("/contact");
+                              } else {
+                                navigate("/auth/signup");
+                              }
+                            }}
+                            variant={plan.isPopular ? "primary" : "secondary"}
+                            className="w-full"
+                          >
+                            {plan.ctaText}
+                          </GradientButton>
+                        </div>
+                        
+                        {/* Features */}
+                        <div className="space-y-6 flex-1">
                           <div>
-                            <h4 className="font-semibold mb-3">What's included:</h4>
-                            <ul className="space-y-2">
+                            <h4 className="font-semibold mb-4 text-white">What's included:</h4>
+                            <ul className="space-y-3">
                               {plan.features.map((feature, featureIndex) => (
                                 <li key={featureIndex} className="flex items-start text-sm">
-                                  <CheckCircle className="w-4 h-4 text-primary mr-3 mt-0.5 flex-shrink-0" />
-                                  <span>{feature}</span>
+                                  <CheckCircle className="w-4 h-4 text-[#7c45eb] mr-3 mt-0.5 flex-shrink-0" />
+                                  <span className="text-neutral-300">{feature}</span>
                                 </li>
                               ))}
                             </ul>
@@ -336,11 +340,11 @@ const PricingPage = () => {
                           
                           {plan.limitations.length > 0 && (
                             <div>
-                              <h4 className="font-semibold mb-3 text-muted-foreground">Limitations:</h4>
-                              <ul className="space-y-2">
+                              <h4 className="font-semibold mb-4 text-neutral-400">Limitations:</h4>
+                              <ul className="space-y-3">
                                 {plan.limitations.map((limitation, limitIndex) => (
-                                  <li key={limitIndex} className="flex items-start text-sm text-muted-foreground">
-                                    <span className="w-4 h-4 mr-3 mt-0.5 flex-shrink-0">×</span>
+                                  <li key={limitIndex} className="flex items-start text-sm text-neutral-500">
+                                    <span className="w-4 h-4 mr-3 mt-0.5 flex-shrink-0 text-neutral-600">×</span>
                                     <span>{limitation}</span>
                                   </li>
                                 ))}
@@ -348,80 +352,109 @@ const PricingPage = () => {
                             </div>
                           )}
                         </div>
-                      </CardContent>
-                    </Card>
-                  </GlowingEffect>
+                      </div>
+                    </div>
+                  </div>
                 </motion.div>
               );
             })}
           </div>
+        </div>
+      </section>
 
-          {/* FAQ Section */}
+      {/* FAQ Section */}
+      <section className="py-20 bg-black/[0.96]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
+            className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              <span className="gradient-text-secondary">Frequently Asked Questions</span>
+            <h2 className="bg-opacity-50 bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-3xl md:text-4xl font-bold mb-4 text-transparent">
+              Frequently Asked Questions
             </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {faqs.map((faq, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <Card className="glass h-full">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-3">
-                        <HelpCircle className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                        <div>
-                          <h3 className="font-semibold mb-2">{faq.question}</h3>
-                          <p className="text-sm text-muted-foreground">{faq.answer}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
-
-          {/* CTA Section */}
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mt-20"
+            className="space-y-1"
           >
-            <GlowingEffect color="crypto">
-              <div className="max-w-2xl mx-auto">
-                <h2 className="text-2xl font-bold mb-4">
-                  Ready to unlock blockchain intelligence?
-                </h2>
-                <p className="text-muted-foreground mb-6">
-                  Join thousands of users already using ChainQuery to make sense of on-chain data.
-                </p>
-                <Button 
-                  size="lg"
-                  onClick={() => navigate("/auth/signup")}
-                  className="bg-gradient-primary hover:opacity-80"
+            <Accordion 
+              type="single" 
+              collapsible
+              className="w-full"
+            >
+              {faqs.map((faq, index) => (
+                <AccordionItem 
+                  key={index} 
+                  value={`faq-${index}`}
+                  className="border-b border-white/10"
                 >
-                  Start Free Today
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </div>
-            </GlowingEffect>
+                  <AccordionTrigger className="text-left hover:no-underline group [&>svg]:hidden">
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-xl font-semibold transition-colors text-gray-400 group-hover:text-white group-data-[state=open]:text-white">
+                        {faq.question}
+                      </span>
+                      <Plus className="w-5 h-5 text-[#7c45eb] transition-opacity group-data-[state=open]:opacity-0" />
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    <div className="space-y-4">
+                      <p className="text-base leading-relaxed text-gray-300">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </motion.div>
         </div>
-      </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-black/[0.96]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <div className="relative rounded-2xl border border-gray-700 p-2 md:rounded-3xl md:p-3">
+              {/* Gray glow behind the card */}
+              <div className="absolute inset-0 rounded-2xl bg-gray-500/20 blur-[9px] md:rounded-3xl" />
+              
+              {/* Black card with content */}
+              <div className="relative bg-black rounded-xl p-8 md:p-8 md:rounded-2xl">
+                <h2 className="text-2xl font-bold text-white mb-4">
+                  Ready to unlock blockchain intelligence?
+                </h2>
+                <p className="text-neutral-400 mb-6">
+                  Join thousands of users already using ChainQuery to make sense of on-chain data.
+                </p>
+                <div className="flex justify-center">
+                  <HoverBorderGradient
+                    onClick={() => navigate("/auth/signup")}
+                    className="text-base px-6 py-2 flex items-center gap-2"
+                  >
+                  Start Free Today
+                  <ArrowRight className="w-4 h-4" />
+                </HoverBorderGradient>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 };

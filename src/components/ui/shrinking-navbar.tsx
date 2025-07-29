@@ -58,6 +58,7 @@ export const ShrinkingNavBody = ({ children, className }: NavBodyProps) => {
       className={cn(
         "relative z-50 flex w-full flex-row items-center justify-between px-6 py-4 lg:px-8",
         "bg-black/40 backdrop-blur-md border-b border-white/10",
+        "max-w-8xl mx-auto",
         className,
       )}
     >

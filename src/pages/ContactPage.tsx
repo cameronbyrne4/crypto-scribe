@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import Footer from "@/components/Footer";
 import { 
   Mail, 
   MessageSquare, 
@@ -27,7 +28,8 @@ import {
   Linkedin,
   Clock,
   MapPin,
-  CheckCircle
+  CheckCircle,
+  Database
 } from "lucide-react";
 
 const ContactPage = () => {
@@ -387,6 +389,8 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

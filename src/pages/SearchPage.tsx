@@ -15,6 +15,7 @@ import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
 import { 
   Search, 
@@ -377,6 +378,8 @@ const SearchPage = () => {
           </section>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 };
