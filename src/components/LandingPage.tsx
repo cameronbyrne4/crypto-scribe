@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import React from "react";
 import {
   ShrinkingNavbar,
   ShrinkingNavBody,
@@ -262,7 +263,7 @@ const LandingPage = () => {
 
       {/* Features Section - GitHub Style */}
       <section className="py-20 bg-black/[0.96]" id="features">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -374,7 +375,7 @@ const LandingPage = () => {
 
       {/* Why Us Section */}
       <section className="py-20 bg-black/[0.96]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -416,21 +417,22 @@ const LandingPage = () => {
                   {/* Gray glow behind the card */}
                   <div className="absolute inset-0 rounded-2xl bg-gray-500/20 blur-[9px] md:rounded-3xl" />
                   
-                  {/* Black card with content */}
-                  <div className="relative bg-black rounded-xl p-6 md:p-6 md:rounded-2xl">
-                                        <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden">
-                      <div className="relative flex flex-1 flex-col justify-between gap-3">
-                        <div className="w-fit rounded-lg border border-gray-600 p-2">
-                          {card.icon}
-                        </div>
-                        <div className="space-y-3">
-                          <h3 className="-tracking-4 pt-0.5 font-sans text-xl/[1.375rem] font-semibold text-balance text-foreground md:text-2xl/[1.875rem]">
-                            {card.title}
-                          </h3>
-                          <h2 className="font-sans text-sm/[1.125rem] text-muted-foreground md:text-base/[1.375rem] [&_b]:md:font-semibold [&_strong]:md:font-semibold">
-                            {card.description}
-                          </h2>
-                        </div>
+                                    {/* Black card with content */}
+                  <div className="relative bg-black rounded-xl p-4 md:p-4 md:rounded-2xl h-full">
+                    <div className="relative flex h-full flex-col justify-between">
+                      {/* Icon in top left */}
+                      <div className="w-fit rounded border border-gray-600 p-1">
+                        {React.cloneElement(card.icon, { className: "w-6 h-6 text-[#7c45eb]" })}
+                      </div>
+                      
+                      {/* Text at bottom */}
+                      <div className="space-y-2">
+                        <h3 className="-tracking-4 font-sans text-lg font-semibold text-balance text-foreground md:text-xl">
+                          {card.title}
+                        </h3>
+                        <h2 className="font-sans text-sm text-muted-foreground md:text-base [&_b]:md:font-semibold [&_strong]:md:font-semibold">
+                          {card.description}
+                        </h2>
                       </div>
                     </div>
                   </div>
