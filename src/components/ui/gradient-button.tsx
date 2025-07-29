@@ -6,13 +6,15 @@ interface GradientButtonProps {
   onClick?: () => void;
   className?: string;
   variant?: "primary" | "secondary";
+  disabled?: boolean;
 }
 
 const GradientButton: React.FC<GradientButtonProps> = ({ 
   children, 
   onClick, 
   className = "",
-  variant = "primary"
+  variant = "primary",
+  disabled = false
 }) => {
   const gradientColors = variant === "primary" 
     ? "rgba(124,69,235,0.6)" // Purple for primary
@@ -24,8 +26,9 @@ const GradientButton: React.FC<GradientButtonProps> = ({
 
   return (
     <button 
-      className={`bg-slate-800 no-underline group cursor-pointer relative shadow-2xl shadow-zinc-900 rounded-full p-px text-xs font-semibold leading-6 text-white inline-block ${className}`}
-      onClick={onClick}
+      className={`bg-slate-800 no-underline group cursor-pointer relative shadow-2xl shadow-zinc-900 rounded-full p-px text-xs font-semibold leading-6 text-white inline-block ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
     >
       <span className="absolute inset-0 overflow-hidden rounded-full">
         <span 

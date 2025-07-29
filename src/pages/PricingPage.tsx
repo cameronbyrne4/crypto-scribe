@@ -260,6 +260,7 @@ const PricingPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {plans.map((plan, index) => {
               const price = getPrice(plan);
+              const isComingSoon = plan.name !== "Free";
               
               return (
                 <motion.div
@@ -307,6 +308,16 @@ const PricingPage = () => {
                           </div>
                         </div>
                         
+                        {/* Coming Soon Overlay for Premium and Enterprise */}
+                        {isComingSoon && (
+                          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm rounded-xl flex items-center justify-center z-20">
+                            <div className="text-center">
+                              <div className="text-2xl font-bold text-white mb-2">Coming Soon</div>
+                              <div className="text-neutral-400 text-sm">We're working hard to bring you more features</div>
+                            </div>
+                          </div>
+                        )}
+                        
                         {/* CTA Button */}
                         <div className="mb-8">
                           <GradientButton
@@ -319,13 +330,14 @@ const PricingPage = () => {
                             }}
                             variant={plan.isPopular ? "primary" : "secondary"}
                             className="w-full"
+                            disabled={isComingSoon}
                           >
-                            {plan.ctaText}
+                            {isComingSoon ? "Coming Soon" : plan.ctaText}
                           </GradientButton>
                         </div>
                         
                         {/* Features */}
-                        <div className="space-y-6 flex-1">
+                        <div className={`space-y-6 flex-1 ${isComingSoon ? 'blur-sm' : ''}`}>
                           <div>
                             <h4 className="font-semibold mb-4 text-white">What's included:</h4>
                             <ul className="space-y-3">
