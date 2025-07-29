@@ -1,8 +1,20 @@
 import { motion } from "framer-motion";
-import { Navbar } from "@/components/ui/navbar";
+import { useState } from "react";
+import {
+  ShrinkingNavbar,
+  ShrinkingNavBody,
+  ShrinkingNavItems,
+  ShrinkingMobileNav,
+  ShrinkingNavbarLogo,
+  ShrinkingNavbarButton,
+  ShrinkingMobileNavHeader,
+  ShrinkingMobileNavToggle,
+  ShrinkingMobileNavMenu,
+} from "@/components/ui/shrinking-navbar";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { EvervaultCard } from "@/components/ui/evervault-card";
 import { Card, CardContent } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 import { 
   Database, 
   Shield, 
@@ -15,6 +27,24 @@ import {
 } from "lucide-react";
 
 const AboutPage = () => {
+  const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navItems = [
+    {
+      name: "Features",
+      link: "/#features",
+    },
+    {
+      name: "Pricing",
+      link: "/pricing",
+    },
+    {
+      name: "Contact",
+      link: "/contact",
+    },
+  ];
+
   const teamMembers = [
     {
       name: "Alex Chen",
@@ -61,7 +91,71 @@ const AboutPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <ShrinkingNavbar>
+        {/* Desktop Navigation */}
+        <ShrinkingNavBody>
+          <ShrinkingNavbarLogo />
+          <ShrinkingNavItems items={navItems} />
+                      <div className="flex items-center gap-4">
+              <a
+                onClick={() => navigate("/auth/signin")}
+                className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+              >
+                Sign In
+              </a>
+              <ShrinkingNavbarButton variant="secondary" onClick={() => navigate("/auth/signup")}>Get Started</ShrinkingNavbarButton>
+            </div>
+        </ShrinkingNavBody>
+
+        {/* Mobile Navigation */}
+        <ShrinkingMobileNav>
+          <ShrinkingMobileNavHeader>
+            <ShrinkingNavbarLogo />
+            <ShrinkingMobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </ShrinkingMobileNavHeader>
+
+          <ShrinkingMobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          >
+            {navItems.map((item, idx) => (
+              <a
+                key={`mobile-link-${idx}`}
+                href={item.link}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative text-neutral-600 dark:text-neutral-300"
+              >
+                <span className="block">{item.name}</span>
+              </a>
+            ))}
+            <div className="flex w-full flex-col gap-4">
+              <ShrinkingNavbarButton
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  navigate("/auth/signin");
+                }}
+                variant="primary"
+                className="w-full"
+              >
+                Login
+              </ShrinkingNavbarButton>
+              <ShrinkingNavbarButton
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  navigate("/auth/signup");
+                }}
+                variant="primary"
+                className="w-full"
+              >
+                Get Started
+              </ShrinkingNavbarButton>
+            </div>
+          </ShrinkingMobileNavMenu>
+        </ShrinkingMobileNav>
+      </ShrinkingNavbar>
       
       <div className="pt-20 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

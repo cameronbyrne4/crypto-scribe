@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" fill="none">
+  <rect width="800" height="600" fill="#1a1a1a" rx="8"/>
+  
+  <!-- Background grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#333" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#grid)"/>
+  
+  <!-- Chat interface -->
+  <rect x="50" y="50" width="700" height="500" fill="#2a2a2a" rx="12" stroke="#444" stroke-width="2"/>
+  
+  <!-- Header -->
+  <rect x="50" y="50" width="700" height="60" fill="#333" rx="12"/>
+  <circle cx="80" cy="80" r="15" fill="#22c55e"/>
+  <text x="110" y="85" fill="white" font-family="Arial" font-size="16" font-weight="bold">ChainQuery AI</text>
+  
+  <!-- Chat messages -->
+  <rect x="80" y="130" width="600" height="80" fill="#3a3a3a" rx="8"/>
+  <text x="100" y="155" fill="#22c55e" font-family="Arial" font-size="14" font-weight="bold">User:</text>
+  <text x="100" y="175" fill="white" font-family="Arial" font-size="14">"Show me all transactions from this wallet"</text>
+  <text x="100" y="195" fill="#888" font-family="Arial" font-size="12">0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6</text>
+  
+  <rect x="80" y="230" width="600" height="120" fill="#1e3a2a" rx="8" stroke="#22c55e" stroke-width="1"/>
+  <text x="100" y="255" fill="#22c55e" font-family="Arial" font-size="14" font-weight="bold">AI Response:</text>
+  <text x="100" y="275" fill="white" font-family="Arial" font-size="14">Found 47 transactions across 3 chains:</text>
+  <text x="100" y="295" fill="#22c55e" font-family="Arial" font-size="12">• Ethereum: 23 transactions</text>
+  <text x="100" y="315" fill="#22c55e" font-family="Arial" font-size="12">• Base: 15 transactions</text>
+  <text x="100" y="335" fill="#22c55e" font-family="Arial" font-size="12">• Polygon: 9 transactions</text>
+  
+  <!-- Input area -->
+  <rect x="80" y="380" width="600" height="50" fill="#3a3a3a" rx="8"/>
+  <text x="100" y="410" fill="#888" font-family="Arial" font-size="14">Ask about any blockchain activity...</text>
+  
+  <!-- Blockchain icons -->
+  <circle cx="720" cy="80" r="8" fill="#627eea"/>
+  <circle cx="740" cy="80" r="8" fill="#f7931a"/>
+  <circle cx="760" cy="80" r="8" fill="#8247e5"/>
+</svg> 

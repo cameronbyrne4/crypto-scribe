@@ -78,13 +78,29 @@ Hex
 Tailwind Class
 shadcn/ui Usage
 Primary Accent
-#4F46E5
-bg-primary
-Primary buttons, focus states
+#7c45eb
+text-[#7c45eb]
+Hover states, selections, primary accents
 Secondary Accent
-#33D69F
-bg-secondary
-Success states, secondary buttons
+#ecc48c
+text-[#ecc48c]
+Secondary highlights, warm accents
+Deep Indigo
+#300c77
+bg-[#300c77]
+Dark backgrounds, depth
+Navy Blue
+#370e8a
+bg-[#370e8a]
+Secondary dark backgrounds
+Light Gray
+#eaeaf1
+text-[#eaeaf1]
+Light text, subtle highlights
+Dark Gray
+#34343c
+bg-[#34343c]
+Dark surfaces, borders
 Warning
 #FFC700
 bg-yellow-500

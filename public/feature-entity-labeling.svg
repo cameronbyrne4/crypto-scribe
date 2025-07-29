@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" fill="none">
+  <rect width="800" height="600" fill="#1a1a1a" rx="8"/>
+  
+  <!-- Background grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#333" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#grid)"/>
+  
+  <!-- Dashboard -->
+  <rect x="50" y="50" width="700" height="500" fill="#2a2a2a" rx="12" stroke="#444" stroke-width="2"/>
+  
+  <!-- Header -->
+  <rect x="50" y="50" width="700" height="60" fill="#333" rx="12"/>
+  <text x="80" y="85" fill="white" font-family="Arial" font-size="16" font-weight="bold">Entity Labeling Dashboard</text>
+  
+  <!-- Entity cards -->
+  <!-- Whale -->
+  <rect x="80" y="130" width="200" height="120" fill="#1e3a2a" rx="8" stroke="#22c55e" stroke-width="2"/>
+  <circle cx="100" cy="150" r="15" fill="#f7931a"/>
+  <text x="125" y="155" fill="white" font-family="Arial" font-size="14" font-weight="bold">Whale</text>
+  <text x="100" y="175" fill="#22c55e" font-family="Arial" font-size="12" text-anchor="middle">Confidence: 98%</text>
+  <text x="100" y="195" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Holdings: $12.4M</text>
+  <text x="100" y="210" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Risk: Low</text>
+  <text x="100" y="225" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Age: 2.3 years</text>
+  
+  <!-- MEV Bot -->
+  <rect x="300" y="130" width="200" height="120" fill="#3a1e1e" rx="8" stroke="#ef4444" stroke-width="2"/>
+  <circle cx="320" cy="150" r="15" fill="#ef4444"/>
+  <text x="345" y="155" fill="white" font-family="Arial" font-size="14" font-weight="bold">MEV Bot</text>
+  <text x="320" y="175" fill="#ef4444" font-family="Arial" font-size="12" text-anchor="middle">Confidence: 94%</text>
+  <text x="320" y="195" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Sandwiches: 47</text>
+  <text x="320" y="210" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Risk: High</text>
+  <text x="320" y="225" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Profit: $89K</text>
+  
+  <!-- Exchange -->
+  <rect x="520" y="130" width="200" height="120" fill="#1e1e3a" rx="8" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="540" cy="150" r="15" fill="#3b82f6"/>
+  <text x="565" y="155" fill="white" font-family="Arial" font-size="14" font-weight="bold">Exchange</text>
+  <text x="540" y="175" fill="#3b82f6" font-family="Arial" font-size="12" text-anchor="middle">Confidence: 87%</text>
+  <text x="540" y="195" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Type: DEX</text>
+  <text x="540" y="210" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Risk: Medium</text>
+  <text x="540" y="225" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Volume: $2.1M</text>
+  
+  <!-- Mixer -->
+  <rect x="80" y="270" width="200" height="120" fill="#3a3a1e" rx="8" stroke="#eab308" stroke-width="2"/>
+  <circle cx="100" cy="290" r="15" fill="#eab308"/>
+  <text x="125" y="295" fill="white" font-family="Arial" font-size="14" font-weight="bold">Mixer</text>
+  <text x="100" y="315" fill="#eab308" font-family="Arial" font-size="12" text-anchor="middle">Confidence: 76%</text>
+  <text x="100" y="335" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Type: Tornado</text>
+  <text x="100" y="350" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Risk: High</text>
+  <text x="100" y="365" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Deposits: 12</text>
+  
+  <!-- Smart Contract -->
+  <rect x="300" y="270" width="200" height="120" fill="#1e3a3a" rx="8" stroke="#06b6d4" stroke-width="2"/>
+  <circle cx="320" cy="290" r="15" fill="#06b6d4"/>
+  <text x="345" y="295" fill="white" font-family="Arial" font-size="14" font-weight="bold">Contract</text>
+  <text x="320" y="315" fill="#06b6d4" font-family="Arial" font-size="12" text-anchor="middle">Confidence: 91%</text>
+  <text x="320" y="335" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Type: DeFi</text>
+  <text x="320" y="350" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Risk: Low</text>
+  <text x="320" y="365" fill="white" font-family="Arial" font-size="10" text-anchor="middle">TVL: $5.2M</text>
+  
+  <!-- Unknown -->
+  <rect x="520" y="270" width="200" height="120" fill="#3a3a3a" rx="8" stroke="#6b7280" stroke-width="2"/>
+  <circle cx="540" cy="290" r="15" fill="#6b7280"/>
+  <text x="565" y="295" fill="white" font-family="Arial" font-size="14" font-weight="bold">Unknown</text>
+  <text x="540" y="315" fill="#6b7280" font-family="Arial" font-size="12" text-anchor="middle">Confidence: 23%</text>
+  <text x="540" y="335" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Patterns: 3</text>
+  <text x="540" y="350" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Risk: Unknown</text>
+  <text x="540" y="365" fill="white" font-family="Arial" font-size="10" text-anchor="middle">Age: 0.5 years</text>
+  
+  <!-- Summary stats -->
+  <rect x="80" y="420" width="640" height="110" fill="#1e1e1e" rx="8" stroke="#444" stroke-width="1"/>
+  <text x="100" y="445" fill="#22c55e" font-family="Arial" font-size="14" font-weight="bold">Entity Analysis Summary:</text>
+  <text x="100" y="465" fill="white" font-family="Arial" font-size="12">• Total Entities: 6</text>
+  <text x="100" y="485" fill="white" font-family="Arial" font-size="12">• High Confidence: 4</text>
+  <text x="100" y="505" fill="white" font-family="Arial" font-size="12">• Risk Assessment: Medium</text>
+  <text x="300" y="465" fill="white" font-family="Arial" font-size="12">• Total Value: $19.7M</text>
+  <text x="300" y="485" fill="white" font-family="Arial" font-size="12">• Suspicious Activity: 2</text>
+  <text x="300" y="505" fill="white" font-family="Arial" font-size="12">• Compliance Status: Review</text>
+</svg> 

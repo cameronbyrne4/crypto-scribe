@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" fill="none">
+  <rect width="800" height="600" fill="#1a1a1a" rx="8"/>
+  
+  <!-- Background grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#333" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#grid)"/>
+  
+  <!-- Network diagram -->
+  <rect x="50" y="50" width="700" height="500" fill="#2a2a2a" rx="12" stroke="#444" stroke-width="2"/>
+  
+  <!-- Header -->
+  <rect x="50" y="50" width="700" height="60" fill="#333" rx="12"/>
+  <text x="80" y="85" fill="white" font-family="Arial" font-size="16" font-weight="bold">Cross-Chain Transaction Flow</text>
+  
+  <!-- Ethereum Node -->
+  <circle cx="150" cy="200" r="40" fill="#627eea" stroke="#22c55e" stroke-width="3"/>
+  <text x="150" y="205" fill="white" font-family="Arial" font-size="12" text-anchor="middle" font-weight="bold">ETH</text>
+  <text x="150" y="270" fill="#22c55e" font-family="Arial" font-size="12" text-anchor="middle">23 tx</text>
+  
+  <!-- Base Node -->
+  <circle cx="400" cy="200" r="40" fill="#0052ff" stroke="#22c55e" stroke-width="3"/>
+  <text x="400" y="205" fill="white" font-family="Arial" font-size="12" text-anchor="middle" font-weight="bold">Base</text>
+  <text x="400" y="270" fill="#22c55e" font-family="Arial" font-size="12" text-anchor="middle">15 tx</text>
+  
+  <!-- Polygon Node -->
+  <circle cx="650" cy="200" r="40" fill="#8247e5" stroke="#22c55e" stroke-width="3"/>
+  <text x="650" y="205" fill="white" font-family="Arial" font-size="12" text-anchor="middle" font-weight="bold">Polygon</text>
+  <text x="650" y="270" fill="#22c55e" font-family="Arial" font-size="12" text-anchor="middle">9 tx</text>
+  
+  <!-- Connection lines -->
+  <line x1="190" y1="200" x2="360" y2="200" stroke="#22c55e" stroke-width="3" stroke-dasharray="5,5"/>
+  <line x1="440" y1="200" x2="610" y2="200" stroke="#22c55e" stroke-width="3" stroke-dasharray="5,5"/>
+  
+  <!-- Transaction flow arrows -->
+  <path d="M 275 180 L 275 160 L 285 160 L 275 150 L 265 160 L 275 160" fill="#22c55e"/>
+  <path d="M 525 180 L 525 160 L 535 160 L 525 150 L 515 160 L 525 160" fill="#22c55e"/>
+  
+  <!-- Central wallet -->
+  <circle cx="400" cy="350" r="50" fill="#f7931a" stroke="#22c55e" stroke-width="4"/>
+  <text x="400" y="355" fill="white" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">Wallet</text>
+  <text x="400" y="375" fill="white" font-family="Arial" font-size="10" text-anchor="middle">0x742d35...</text>
+  
+  <!-- Connection to wallet -->
+  <line x1="400" y1="250" x2="400" y2="300" stroke="#22c55e" stroke-width="3"/>
+  <line x1="150" y1="240" x2="350" y2="320" stroke="#22c55e" stroke-width="2" stroke-dasharray="3,3"/>
+  <line x1="650" y1="240" x2="450" y2="320" stroke="#22c55e" stroke-width="2" stroke-dasharray="3,3"/>
+  
+  <!-- Stats panel -->
+  <rect x="80" y="450" width="640" height="80" fill="#1e3a2a" rx="8" stroke="#22c55e" stroke-width="1"/>
+  <text x="100" y="475" fill="#22c55e" font-family="Arial" font-size="14" font-weight="bold">Total Flow Analysis:</text>
+  <text x="100" y="495" fill="white" font-family="Arial" font-size="12">• Total Transactions: 47</text>
+  <text x="100" y="515" fill="white" font-family="Arial" font-size="12">• Total Volume: $2.4M</text>
+  <text x="300" y="495" fill="white" font-family="Arial" font-size="12">• Cross-chain Bridges: 8</text>
+  <text x="300" y="515" fill="white" font-family="Arial" font-size="12">• Risk Score: Medium</text>
+</svg> 
