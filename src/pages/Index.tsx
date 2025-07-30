@@ -4,6 +4,7 @@ import React from "react";
 import {
   UnifiedNavbar,
 } from "@/components/ui/shrinking-navbar";
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/clerk-react";
 import { GridBackground } from "@/components/ui/grid-background";
 import { AppleCards } from "@/components/ui/apple-cards";
 import { EvervaultCard } from "@/components/ui/evervault-card";
@@ -171,13 +172,25 @@ const Index = () => {
             </p>
             
             <div className="flex justify-center">
-              <HoverBorderGradient
-                onClick={() => navigate("/auth/signup")}
-                className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 flex items-center gap-2"
-              >
-                Start Investigating
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
-              </HoverBorderGradient>
+              <SignedOut>
+                <SignUpButton mode="modal">
+                  <HoverBorderGradient
+                    className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 flex items-center gap-2 cursor-pointer"
+                  >
+                    Start Investigating
+                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+                  </HoverBorderGradient>
+                </SignUpButton>
+              </SignedOut>
+              <SignedIn>
+                <HoverBorderGradient
+                  onClick={() => navigate("/app")}
+                  className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 flex items-center gap-2 cursor-pointer"
+                >
+                  Go to Dashboard
+                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+                </HoverBorderGradient>
+              </SignedIn>
             </div>
             
             <p className="text-sm text-neutral-400 mt-4">
@@ -240,15 +253,27 @@ const Index = () => {
                         <p className="text-base leading-relaxed text-gray-300 mb-6">
                           {feature.description}
                         </p>
-                        <button
-                          onClick={() => navigate(feature.ctaLink)}
-                          className="relative text-[#7c45eb] hover:text-[#7c45eb] transition-colors duration-200 group text-base font-medium"
-                        >
-                          <span className="relative">
-                            {feature.cta} →
-                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#7c45eb] transition-all duration-300 group-hover:w-full"></span>
-                          </span>
-                        </button>
+                        <SignedOut>
+                          <SignUpButton mode="modal">
+                            <button className="relative text-[#7c45eb] hover:text-[#7c45eb] transition-colors duration-200 group text-base font-medium cursor-pointer">
+                              <span className="relative">
+                                {feature.cta} →
+                                <span className="absolute bottom-0 left-0 w-0 h-px bg-[#7c45eb] transition-all duration-300 group-hover:w-full"></span>
+                              </span>
+                            </button>
+                          </SignUpButton>
+                        </SignedOut>
+                        <SignedIn>
+                          <button
+                            onClick={() => navigate("/app")}
+                            className="relative text-[#7c45eb] hover:text-[#7c45eb] transition-colors duration-200 group text-base font-medium cursor-pointer"
+                          >
+                            <span className="relative">
+                              {feature.cta} →
+                              <span className="absolute bottom-0 left-0 w-0 h-px bg-[#7c45eb] transition-all duration-300 group-hover:w-full"></span>
+                            </span>
+                          </button>
+                        </SignedIn>
                       </div>
                     </AccordionContent>
                   </AccordionItem>

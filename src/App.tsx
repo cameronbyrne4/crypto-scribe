@@ -6,8 +6,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import SearchPage from "./pages/SearchPage";
-import AuthPage from "./pages/AuthPage";
+import AppLayout from "./components/AppLayout";
+import AppPage from "./pages/AppPage";
+import SearchPage from "./pages/app/SearchPage";
+import HistoryPage from "./pages/app/HistoryPage";
+import SettingsPage from "./pages/app/SettingsPage";
+import ApiKeysPage from "./pages/app/ApiKeysPage";
 import ContactPage from "./pages/ContactPage";
 import PricingPage from "./pages/PricingPage";
 
@@ -33,14 +37,19 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route 
-            path="/search" 
+            path="/app" 
             element={
               <ProtectedRoute>
-                <SearchPage />
+                <AppLayout />
               </ProtectedRoute>
-            } 
-          />
-          <Route path="/auth/:mode" element={<AuthPage />} />
+            }
+          >
+            <Route index element={<AppPage />} />
+            <Route path="search" element={<SearchPage />} />
+            <Route path="history" element={<HistoryPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="api-keys" element={<ApiKeysPage />} />
+          </Route>
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

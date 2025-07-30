@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import {
   UnifiedNavbar,
 } from "@/components/ui/shrinking-navbar";
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/clerk-react";
 import { GridBackground } from "@/components/ui/grid-background";
 import { GlowingCardEffect } from "@/components/ui/glowing-card-effect";
 import { Button } from "@/components/ui/button";
@@ -250,20 +251,40 @@ const PricingPage = () => {
                         
                         {/* CTA Button */}
                         <div className="mb-8">
-                          <GradientButton
-                            onClick={() => {
-                              if (plan.name === "Enterprise") {
-                                navigate("/contact");
-                              } else {
-                                navigate("/auth/signup");
-                              }
-                            }}
-                            variant={plan.isPopular ? "primary" : "secondary"}
-                            className="w-full"
-                            disabled={isComingSoon}
-                          >
-                            {isComingSoon ? "Coming Soon" : plan.ctaText}
-                          </GradientButton>
+                          {plan.name === "Enterprise" ? (
+                            <GradientButton
+                              onClick={() => navigate("/contact")}
+                              variant={plan.isPopular ? "primary" : "secondary"}
+                              className="w-full"
+                              disabled={isComingSoon}
+                            >
+                              {isComingSoon ? "Coming Soon" : plan.ctaText}
+                            </GradientButton>
+                          ) : (
+                            <>
+                              <SignedOut>
+                                <SignUpButton mode="modal">
+                                  <GradientButton
+                                    variant={plan.isPopular ? "primary" : "secondary"}
+                                    className="w-full cursor-pointer"
+                                    disabled={isComingSoon}
+                                  >
+                                    {isComingSoon ? "Coming Soon" : plan.ctaText}
+                                  </GradientButton>
+                                </SignUpButton>
+                              </SignedOut>
+                              <SignedIn>
+                                <GradientButton
+                                  onClick={() => navigate("/app")}
+                                  variant={plan.isPopular ? "primary" : "secondary"}
+                                  className="w-full cursor-pointer"
+                                  disabled={isComingSoon}
+                                >
+                                  Go to Dashboard
+                                </GradientButton>
+                              </SignedIn>
+                            </>
+                          )}
                         </div>
                         
                         {/* Features */}

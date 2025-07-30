@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { ArrowRight } from "lucide-react";
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/clerk-react";
 
 const CtaCard = () => {
   const navigate = useNavigate();
@@ -29,13 +30,25 @@ const CtaCard = () => {
             Join thousands of users already using ChainQuery to make sense of on-chain data.
           </p>
           <div className="flex justify-center">
-            <HoverBorderGradient
-              onClick={() => navigate("/auth/signup")}
-              className="text-base px-6 py-2 flex items-center gap-2"
-            >
-              Start Free Today
-              <ArrowRight className="w-4 h-4" />
-            </HoverBorderGradient>
+            <SignedOut>
+              <SignUpButton mode="modal">
+                <HoverBorderGradient
+                  className="text-base px-6 py-2 flex items-center gap-2 cursor-pointer"
+                >
+                  Start Free Today
+                  <ArrowRight className="w-4 h-4" />
+                </HoverBorderGradient>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <HoverBorderGradient
+                onClick={() => navigate("/app")}
+                className="text-base px-6 py-2 flex items-center gap-2 cursor-pointer"
+              >
+                Go to Dashboard
+                <ArrowRight className="w-4 h-4" />
+              </HoverBorderGradient>
+            </SignedIn>
           </div>
         </div>
       </div>

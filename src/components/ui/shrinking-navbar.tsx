@@ -221,6 +221,9 @@ export const UnifiedNavbar = ({
                 </SignUpButton>
               </SignedOut>
               <SignedIn>
+                <ShrinkingNavbarButton href="/app" variant="secondary">
+                  Try Nous
+                </ShrinkingNavbarButton>
                 <UserButton afterSignOutUrl="/" />
               </SignedIn>
             </div>
@@ -271,6 +274,13 @@ export const UnifiedNavbar = ({
             </SignUpButton>
           </SignedOut>
           <SignedIn>
+            <ShrinkingNavbarButton
+              href="/app"
+              variant="secondary"
+              className="w-fit"
+            >
+              Try Nous
+            </ShrinkingNavbarButton>
             <div className="flex items-center gap-2">
               <UserButton afterSignOutUrl="/" />
               <span className="text-lg text-gray-300">Account</span>
