@@ -36,6 +36,7 @@ import {
   Lock,
   Plus
 } from "lucide-react";
+import CtaCard from "./CtaCard";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -448,7 +449,12 @@ const LandingPage = () => {
         </div>
       </section>
 
-
+      {/* CTA Section */}
+      <section className="py-20 bg-black/[0.96]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
+          <CtaCard />
+        </div>
+      </section>
 
       <Footer />
     </div>

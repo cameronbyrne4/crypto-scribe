@@ -37,6 +37,7 @@ import {
   Plus
 } from "lucide-react";
 import React from "react";
+import CtaCard from "@/components/CtaCard";
 
 const PricingPage = () => {
   const navigate = useNavigate();
@@ -432,37 +433,7 @@ const PricingPage = () => {
       {/* CTA Section */}
       <section className="py-20 bg-black/[0.96]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <div className="relative rounded-2xl border border-gray-700 p-2 md:rounded-3xl md:p-3">
-              {/* Gray glow behind the card */}
-              <div className="absolute inset-0 rounded-2xl bg-gray-500/20 blur-[9px] md:rounded-3xl" />
-              
-              {/* Black card with content */}
-              <div className="relative bg-black rounded-xl p-8 md:p-8 md:rounded-2xl">
-                <h2 className="text-2xl font-bold text-white mb-4">
-                  Ready to unlock blockchain intelligence?
-                </h2>
-                <p className="text-neutral-400 mb-6">
-                  Join thousands of users already using ChainQuery to make sense of on-chain data.
-                </p>
-                <div className="flex justify-center">
-                  <HoverBorderGradient
-                    onClick={() => navigate("/auth/signup")}
-                    className="text-base px-6 py-2 flex items-center gap-2"
-                  >
-                  Start Free Today
-                  <ArrowRight className="w-4 h-4" />
-                </HoverBorderGradient>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          <CtaCard />
         </div>
       </section>
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   ShrinkingNavbar,
@@ -13,37 +13,53 @@ import {
 } from "@/components/ui/shrinking-navbar";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
-import { 
-  Mail, 
-  MessageSquare, 
-  Send, 
-  Calendar,
-  Twitter,
-  Github,
-  Linkedin,
-  Clock,
-  MapPin,
-  CheckCircle,
-  Database
-} from "lucide-react";
+
 
 const ContactPage = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-    subject: "",
-    message: ""
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Load Tally embed script
+  useEffect(() => {
+    const widgetScriptSrc = 'https://tally.so/widgets/embed.js';
+
+    const load = () => {
+      // Load Tally embeds
+      if (typeof (window as any).Tally !== 'undefined') {
+        (window as any).Tally.loadEmbeds();
+        return;
+      }
+
+      // Fallback if window.Tally is not available
+      document
+        .querySelectorAll('iframe[data-tally-src]:not([src])')
+        .forEach((iframeEl) => {
+          const iframe = iframeEl as HTMLIFrameElement;
+          if (iframe.dataset.tallySrc) {
+            iframe.src = iframe.dataset.tallySrc;
+          }
+        });
+    };
+
+    // If Tally is already loaded, load the embeds
+    if (typeof (window as any).Tally !== 'undefined') {
+      load();
+      return;
+    }
+
+    // If the Tally widget script is not loaded yet, load it
+    if (document.querySelector(`script[src="${widgetScriptSrc}"]`) === null) {
+      const script = document.createElement('script');
+      script.src = widgetScriptSrc;
+      script.onload = load;
+      script.onerror = load;
+      document.body.appendChild(script);
+      return;
+    }
+  }, []);
 
   const navItems = [
     {
@@ -60,60 +76,24 @@ const ContactPage = () => {
     },
   ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 1500);
-  };
 
-  const contactInfo = [
-    {
-      icon: <Mail className="w-5 h-5" />,
-      title: "Email",
-      content: "hello@chainquery.io",
-      description: "Send us an email anytime"
-    },
-    {
-      icon: <MessageSquare className="w-5 h-5" />,
-      title: "Live Chat",
-      content: "Available 9-5 PT",
-      description: "Chat with our team in real-time"
-    },
-    {
-      icon: <Calendar className="w-5 h-5" />,
-      title: "Schedule Demo",
-      content: "Book a call",
-      description: "See ChainQuery in action"
-    }
-  ];
-
-  const socialLinks = [
-    { icon: <Twitter className="w-5 h-5" />, name: "Twitter", url: "#" },
-    { icon: <Github className="w-5 h-5" />, name: "GitHub", url: "#" },
-    { icon: <Linkedin className="w-5 h-5" />, name: "LinkedIn", url: "#" }
-  ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black/[0.96]">
       <ShrinkingNavbar>
         {/* Desktop Navigation */}
         <ShrinkingNavBody>
           <ShrinkingNavbarLogo />
           <ShrinkingNavItems items={navItems} />
-                      <div className="flex items-center gap-4">
-              <a
-                onClick={() => navigate("/auth/signin")}
-                className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-              >
-                Sign In
-              </a>
-              <ShrinkingNavbarButton variant="secondary" onClick={() => navigate("/auth/signup")}>Get Started</ShrinkingNavbarButton>
-            </div>
+          <div className="flex items-center gap-4">
+            <a
+              onClick={() => navigate("/auth/signin")}
+              className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+            >
+              Sign In
+            </a>
+            <ShrinkingNavbarButton variant="secondary" onClick={() => navigate("/auth/signup")}>Get Started</ShrinkingNavbarButton>
+          </div>
         </ShrinkingNavBody>
 
         {/* Mobile Navigation */}
@@ -166,7 +146,7 @@ const ContactPage = () => {
         </ShrinkingMobileNav>
       </ShrinkingNavbar>
       
-      <div className="pt-20 pb-16">
+      <div className="pt-32 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <motion.div
@@ -175,216 +155,42 @@ const ContactPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="gradient-text-primary">Get in Touch</span>
+            <h1 className="bg-opacity-50 bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-4xl md:text-5xl font-bold mb-6 text-transparent">
+              Get in Touch
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-neutral-300 max-w-2xl mx-auto">
               Have questions about ChainQuery? Want to see a demo? 
               We'd love to hear from you.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            {/* Contact Form */}
+          <div className="max-w-4xl mx-auto">
+            {/* Tally Form */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <GlowingEffect color="primary">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <MessageSquare className="w-5 h-5 mr-2" />
-                      Send us a message
-                    </CardTitle>
-                    <CardDescription>
-                      Fill out the form below and we'll get back to you within 24 hours.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {isSubmitted ? (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="text-center py-8"
-                      >
-                        <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
-                        <h3 className="text-xl font-semibold mb-2">Message Sent!</h3>
-                        <p className="text-muted-foreground">
-                          Thanks for reaching out. We'll get back to you soon.
-                        </p>
-                      </motion.div>
-                    ) : (
-                      <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <label htmlFor="name" className="text-sm font-medium">
-                              Name *
-                            </label>
-                            <Input
-                              id="name"
-                              value={formData.name}
-                              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                              placeholder="Your name"
-                              required
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label htmlFor="email" className="text-sm font-medium">
-                              Email *
-                            </label>
-                            <Input
-                              id="email"
-                              type="email"
-                              value={formData.email}
-                              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                              placeholder="your@email.com"
-                              required
-                            />
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <label htmlFor="company" className="text-sm font-medium">
-                            Company
-                          </label>
-                          <Input
-                            id="company"
-                            value={formData.company}
-                            onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
-                            placeholder="Your company"
-                          />
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <label htmlFor="subject" className="text-sm font-medium">
-                            Subject *
-                          </label>
-                          <Input
-                            id="subject"
-                            value={formData.subject}
-                            onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                            placeholder="What's this about?"
-                            required
-                          />
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <label htmlFor="message" className="text-sm font-medium">
-                            Message *
-                          </label>
-                          <Textarea
-                            id="message"
-                            value={formData.message}
-                            onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                            placeholder="Tell us more about your needs..."
-                            rows={5}
-                            required
-                          />
-                        </div>
-                        
-                        <Button 
-                          type="submit" 
-                          className="w-full bg-gradient-primary hover:opacity-80"
-                          disabled={isSubmitting}
-                        >
-                          {isSubmitting ? (
-                            <div className="flex items-center">
-                              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                              Sending...
-                            </div>
-                          ) : (
-                            <div className="flex items-center">
-                              <Send className="w-4 h-4 mr-2" />
-                              Send Message
-                            </div>
-                          )}
-                        </Button>
-                      </form>
-                    )}
-                  </CardContent>
-                </Card>
-              </GlowingEffect>
-            </motion.div>
-
-            {/* Contact Info & Quick Links */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="space-y-8"
-            >
-              {/* Contact Methods */}
-              <div>
-                <h2 className="text-2xl font-bold mb-6">
-                  <span className="gradient-text-secondary">Other ways to reach us</span>
-                </h2>
-                <div className="space-y-4">
-                  {contactInfo.map((info, index) => (
-                    <Card key={index} className="glass glass-hover">
-                      <CardContent className="p-4">
-                        <div className="flex items-center space-x-4">
-                          <div className="p-2 rounded-lg bg-primary/20">
-                            {info.icon}
-                          </div>
-                          <div>
-                            <h3 className="font-semibold">{info.title}</h3>
-                            <p className="text-sm text-primary">{info.content}</p>
-                            <p className="text-xs text-muted-foreground">{info.description}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+              <div className="relative rounded-2xl border border-gray-700 p-2 md:rounded-3xl md:p-3">
+                {/* Gray glow behind the card */}
+                <div className="absolute inset-0 rounded-2xl bg-gray-500/20 blur-[9px] md:rounded-3xl" />
+                
+                {/* Black card with content */}
+                <div className="relative bg-black rounded-xl p-6 md:p-6 md:rounded-2xl">
+                  {/* Tally Form Embed */}
+                  <iframe
+                    data-tally-src="https://tally.so/embed/mOMgDM?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                    loading="lazy"
+                    width="100%"
+                    height="400"
+                    frameBorder={0}
+                    marginHeight={0}
+                    marginWidth={0}
+                    title="Contact form"
+                    className="rounded-lg"
+                  />
                 </div>
               </div>
-
-              {/* Office Hours */}
-              <GlowingEffect color="accent">
-                <div className="text-center">
-                  <Clock className="w-8 h-8 text-accent mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Office Hours</h3>
-                  <p className="text-muted-foreground mb-2">Monday - Friday</p>
-                  <p className="text-sm text-muted-foreground">9:00 AM - 5:00 PM PT</p>
-                </div>
-              </GlowingEffect>
-
-              {/* Social Links */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Follow us</h3>
-                <div className="flex space-x-4">
-                  {socialLinks.map((social, index) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      size="sm"
-                      className="glass-hover"
-                      asChild
-                    >
-                      <a href={social.url} className="flex items-center">
-                        {social.icon}
-                        <span className="ml-2">{social.name}</span>
-                      </a>
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Location */}
-              <Card className="glass">
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-3">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <div>
-                      <h3 className="font-semibold">Location</h3>
-                      <p className="text-sm text-muted-foreground">
-                        San Francisco, CA
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </motion.div>
           </div>
         </div>
