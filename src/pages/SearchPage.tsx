@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import {
+  UnifiedNavbar,
+} from "@/components/ui/shrinking-navbar";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
 import { 
   Search, 
@@ -97,14 +101,33 @@ const SearchPage = () => {
     }, 2000);
   };
 
+  const navItems = [
+    {
+      name: "Features",
+      link: "/#features",
+    },
+    {
+      name: "Pricing",
+      link: "/pricing",
+    },
+    {
+      name: "Contact",
+      link: "/contact",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
+      <UnifiedNavbar
+        navItems={navItems}
+      />
+      
       {/* Background Effects */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-10 pt-20">
         {/* Search Section */}
         <section className="py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -284,6 +307,8 @@ const SearchPage = () => {
           </section>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 };

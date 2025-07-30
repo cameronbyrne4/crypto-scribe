@@ -255,7 +255,7 @@ const PricingPage = () => {
                               if (plan.name === "Enterprise") {
                                 navigate("/contact");
                               } else {
-                                navigate("/sign-up");
+                                navigate("/auth/signup");
                               }
                             }}
                             variant={plan.isPopular ? "primary" : "secondary"}

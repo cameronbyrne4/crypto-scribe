@@ -3,8 +3,7 @@ import { IconMenu2, IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Database } from "lucide-react";
 import React, { useState } from "react";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -187,8 +186,6 @@ export const UnifiedNavbar = ({
   className?: string;
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isSignedIn } = useUser();
-  const navigate = useNavigate();
 
   return (
     <ShrinkingNavbar className={className}>
@@ -224,12 +221,6 @@ export const UnifiedNavbar = ({
                 </SignUpButton>
               </SignedOut>
               <SignedIn>
-                <button 
-                  onClick={() => navigate('/app')}
-                  className="relative px-4 py-2 text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-                >
-                  Go to App
-                </button>
                 <UserButton afterSignOutUrl="/" />
               </SignedIn>
             </div>
@@ -280,15 +271,6 @@ export const UnifiedNavbar = ({
             </SignUpButton>
           </SignedOut>
           <SignedIn>
-            <button 
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                navigate('/app');
-              }}
-              className="relative text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer text-left"
-            >
-              Go to App
-            </button>
             <div className="flex items-center gap-2">
               <UserButton afterSignOutUrl="/" />
               <span className="text-lg text-gray-300">Account</span>

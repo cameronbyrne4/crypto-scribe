@@ -106,7 +106,7 @@ const Index = () => {
       description: "Ask complex blockchain questions in plain English and get instant, accurate answers without any technical expertise.",
       image: "/feature-natural-language.svg",
       cta: "Try a Query",
-      ctaLink: "/sign-up"
+      ctaLink: "/auth/signup"
     },
     {
       id: "cross-chain",
@@ -114,7 +114,7 @@ const Index = () => {
       description: "Trace transactions across multiple blockchains with complete flow visibility and entity identification.",
       image: "/feature-cross-chain.svg",
       cta: "Explore Networks",
-      ctaLink: "/sign-up"
+      ctaLink: "/auth/signup"
     },
     {
       id: "entity-labeling",
@@ -122,7 +122,7 @@ const Index = () => {
       description: "Automatically identify whales, MEV bots, exchanges, and other entities with confidence scores and risk assessment.",
       image: "/feature-entity-labeling.svg",
       cta: "View Entities",
-      ctaLink: "/sign-up"
+      ctaLink: "/auth/signup"
     },
     {
       id: "real-time-alerts",
@@ -130,7 +130,7 @@ const Index = () => {
       description: "Set up custom alerts for suspicious transactions, whale movements, and compliance violations across all supported chains.",
       image: "/feature-alerts.svg",
       cta: "Set Up Alerts",
-      ctaLink: "/sign-up"
+      ctaLink: "/auth/signup"
     }
   ];
 
@@ -172,7 +172,7 @@ const Index = () => {
             
             <div className="flex justify-center">
               <HoverBorderGradient
-                onClick={() => navigate("/sign-up")}
+                onClick={() => navigate("/auth/signup")}
                 className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 flex items-center gap-2"
               >
                 Start Investigating
@@ -241,7 +241,7 @@ const Index = () => {
                           {feature.description}
                         </p>
                         <button
-                          onClick={() => navigate("/sign-up")}
+                          onClick={() => navigate(feature.ctaLink)}
                           className="relative text-[#7c45eb] hover:text-[#7c45eb] transition-colors duration-200 group text-base font-medium"
                         >
                           <span className="relative">
