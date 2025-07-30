@@ -74,8 +74,6 @@ const ContactPage = () => {
     <div className="min-h-screen bg-black/[0.96]">
       <UnifiedNavbar
         navItems={navItems}
-        onSignIn={() => navigate("/auth/signin")}
-        onGetStarted={() => navigate("/auth/signup")}
       />
       
       <div className="pt-32 pb-16">
@@ -92,7 +90,7 @@ const ContactPage = () => {
             </h1>
             <p className="text-xl text-neutral-300 max-w-2xl mx-auto">
               Have questions about ChainQuery? Want to see a demo? 
-              We'd love to hear from you.
+              Hit us up.
             </p>
           </motion.div>
 

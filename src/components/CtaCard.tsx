@@ -30,7 +30,7 @@ const CtaCard = () => {
           </p>
           <div className="flex justify-center">
             <HoverBorderGradient
-              onClick={() => navigate("/auth/signup")}
+              onClick={() => navigate("/sign-up")}
               className="text-base px-6 py-2 flex items-center gap-2"
             >
               Start Free Today

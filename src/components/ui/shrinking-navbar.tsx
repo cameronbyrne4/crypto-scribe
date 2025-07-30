@@ -3,6 +3,8 @@ import { IconMenu2, IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Database } from "lucide-react";
 import React, { useState } from "react";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -37,7 +39,7 @@ export const ShrinkingNavBody = ({ children, className }: { children: React.Reac
   return (
     <div
       className={cn(
-        "relative z-50 flex w-full flex-row items-center justify-between px-6 py-4 lg:px-8",
+        "relative z-50 flex w-full flex-row items-center px-6 py-4 lg:px-8",
         "bg-black/40 backdrop-blur-md border-b border-white/10",
         "max-w-8xl mx-auto",
         className,
@@ -52,7 +54,7 @@ export const ShrinkingNavItems = ({ items, className, onItemClick }: NavItemsPro
   return (
     <div
       className={cn(
-        "hidden flex-1 flex-row items-center justify-center space-x-8 text-lg font-medium lg:flex",
+        "flex flex-row items-center justify-center space-x-8 text-lg font-medium",
         className,
       )}
     >
@@ -179,46 +181,66 @@ export const ShrinkingNavbarButton = ({
 // New unified navbar component that handles responsive behavior
 export const UnifiedNavbar = ({ 
   navItems, 
-  className,
-  onSignIn,
-  onGetStarted 
+  className
 }: {
   navItems: { name: string; link: string; }[];
   className?: string;
-  onSignIn?: () => void;
-  onGetStarted?: () => void;
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isSignedIn } = useUser();
+  const navigate = useNavigate();
 
   return (
     <ShrinkingNavbar className={className}>
       <ShrinkingNavBody>
-        <ShrinkingNavbarLogo />
-        
-        {/* Desktop Navigation Items */}
-        <ShrinkingNavItems 
-          items={navItems} 
-          onItemClick={() => setIsMobileMenuOpen(false)}
-        />
-        
-        {/* Desktop Action Buttons */}
-        <div className="hidden lg:flex items-center gap-4">
-          <a
-            onClick={onSignIn}
-            className="relative px-4 py-2 text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-          >
-            Sign In
-          </a>
-          <ShrinkingNavbarButton variant="secondary" onClick={onGetStarted}>
-            Get Started
-          </ShrinkingNavbarButton>
-        </div>
+        <div className="grid grid-cols-3 items-center w-full">
+          {/* Left: Logo */}
+          <div className="flex justify-start">
+            <ShrinkingNavbarLogo />
+          </div>
+          
+          {/* Center: Navigation Items - Truly centered on page */}
+          <div className="hidden lg:flex justify-center">
+            <ShrinkingNavItems 
+              items={navItems} 
+              onItemClick={() => setIsMobileMenuOpen(false)}
+            />
+          </div>
+          
+          {/* Right: Action Buttons */}
+          <div className="flex justify-end items-center gap-4">
+            {/* Desktop Action Buttons */}
+            <div className="hidden lg:flex items-center gap-4">
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button className="relative px-4 py-2 text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer">
+                    Sign In
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <ShrinkingNavbarButton variant="secondary">
+                    Get Started
+                  </ShrinkingNavbarButton>
+                </SignUpButton>
+              </SignedOut>
+              <SignedIn>
+                <button 
+                  onClick={() => navigate('/app')}
+                  className="relative px-4 py-2 text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+                >
+                  Go to App
+                </button>
+                <UserButton afterSignOutUrl="/" />
+              </SignedIn>
+            </div>
 
-        {/* Mobile Menu Toggle */}
-        <ShrinkingMobileNavToggle
-          isOpen={isMobileMenuOpen}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        />
+            {/* Mobile Menu Toggle */}
+            <ShrinkingMobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </div>
+        </div>
       </ShrinkingNavBody>
 
       {/* Mobile Navigation Menu */}
@@ -238,25 +260,40 @@ export const UnifiedNavbar = ({
         ))}
         
         <div className="flex flex-col gap-4 pt-4 border-t border-white/10">
-          <a
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              onSignIn?.();
-            }}
-            className="relative text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-          >
-            Sign In
-          </a>
-          <ShrinkingNavbarButton
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              onGetStarted?.();
-            }}
-            variant="secondary"
-            className="w-fit"
-          >
-            Get Started
-          </ShrinkingNavbarButton>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer text-left"
+              >
+                Sign In
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <ShrinkingNavbarButton
+                onClick={() => setIsMobileMenuOpen(false)}
+                variant="secondary"
+                className="w-fit"
+              >
+                Get Started
+              </ShrinkingNavbarButton>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <button 
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                navigate('/app');
+              }}
+              className="relative text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer text-left"
+            >
+              Go to App
+            </button>
+            <div className="flex items-center gap-2">
+              <UserButton afterSignOutUrl="/" />
+              <span className="text-lg text-gray-300">Account</span>
+            </div>
+          </SignedIn>
         </div>
       </ShrinkingMobileNavMenu>
     </ShrinkingNavbar>

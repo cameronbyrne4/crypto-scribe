@@ -148,8 +148,6 @@ const PricingPage = () => {
     <div className="min-h-screen bg-black/[0.96]">
       <UnifiedNavbar
         navItems={navItems}
-        onSignIn={() => navigate("/auth/signin")}
-        onGetStarted={() => navigate("/auth/signup")}
       />
       
       {/* Hero Section */}
@@ -257,7 +255,7 @@ const PricingPage = () => {
                               if (plan.name === "Enterprise") {
                                 navigate("/contact");
                               } else {
-                                navigate("/auth/signup");
+                                navigate("/sign-up");
                               }
                             }}
                             variant={plan.isPopular ? "primary" : "secondary"}
