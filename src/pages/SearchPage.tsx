@@ -1,15 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  ShrinkingNavbar,
-  ShrinkingNavBody,
-  ShrinkingNavItems,
-  ShrinkingMobileNav,
-  ShrinkingNavbarLogo,
-  ShrinkingNavbarButton,
-  ShrinkingMobileNavHeader,
-  ShrinkingMobileNavToggle,
-  ShrinkingMobileNavMenu,
+  UnifiedNavbar,
 } from "@/components/ui/shrinking-navbar";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
@@ -33,7 +25,6 @@ import {
 
 const SearchPage = () => {
   const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<any>(null);
@@ -127,71 +118,11 @@ const SearchPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <ShrinkingNavbar>
-        {/* Desktop Navigation */}
-        <ShrinkingNavBody>
-          <ShrinkingNavbarLogo />
-          <ShrinkingNavItems items={navItems} />
-                      <div className="flex items-center gap-4">
-              <a
-                onClick={() => navigate("/auth/signin")}
-                className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-              >
-                Sign In
-              </a>
-              <ShrinkingNavbarButton variant="secondary" onClick={() => navigate("/auth/signup")}>Get Started</ShrinkingNavbarButton>
-            </div>
-        </ShrinkingNavBody>
-
-        {/* Mobile Navigation */}
-        <ShrinkingMobileNav>
-          <ShrinkingMobileNavHeader>
-            <ShrinkingNavbarLogo />
-            <ShrinkingMobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
-          </ShrinkingMobileNavHeader>
-
-          <ShrinkingMobileNavMenu
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
-            {navItems.map((item, idx) => (
-              <a
-                key={`mobile-link-${idx}`}
-                href={item.link}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
-              >
-                <span className="block">{item.name}</span>
-              </a>
-            ))}
-            <div className="flex w-full flex-col gap-4">
-              <ShrinkingNavbarButton
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  navigate("/auth/signin");
-                }}
-                variant="primary"
-                className="w-full"
-              >
-                Login
-              </ShrinkingNavbarButton>
-              <ShrinkingNavbarButton
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  navigate("/auth/signup");
-                }}
-                variant="primary"
-                className="w-full"
-              >
-                Get Started
-              </ShrinkingNavbarButton>
-            </div>
-          </ShrinkingMobileNavMenu>
-        </ShrinkingMobileNav>
-      </ShrinkingNavbar>
+      <UnifiedNavbar
+        navItems={navItems}
+        onSignIn={() => navigate("/auth/signin")}
+        onGetStarted={() => navigate("/auth/signup")}
+      />
       
       {/* Background Effects */}
       <div className="fixed inset-0 z-0">

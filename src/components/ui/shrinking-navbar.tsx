@@ -9,11 +9,6 @@ interface NavbarProps {
   className?: string;
 }
 
-interface NavBodyProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
 interface NavItemsProps {
   items: {
     name: string;
@@ -21,16 +16,6 @@ interface NavItemsProps {
   }[];
   className?: string;
   onItemClick?: () => void;
-}
-
-interface MobileNavProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-interface MobileNavHeaderProps {
-  children: React.ReactNode;
-  className?: string;
 }
 
 interface MobileNavMenuProps {
@@ -43,16 +28,12 @@ interface MobileNavMenuProps {
 export const ShrinkingNavbar = ({ children, className }: NavbarProps) => {
   return (
     <div className={cn("fixed inset-x-0 top-0 z-50 w-full", className)}>
-      {React.Children.map(children, (child) =>
-        React.isValidElement(child)
-          ? React.cloneElement(child as React.ReactElement)
-          : child,
-      )}
+      {children}
     </div>
   );
 };
 
-export const ShrinkingNavBody = ({ children, className }: NavBodyProps) => {
+export const ShrinkingNavBody = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
     <div
       className={cn(
@@ -71,49 +52,20 @@ export const ShrinkingNavItems = ({ items, className, onItemClick }: NavItemsPro
   return (
     <div
       className={cn(
-        "hidden flex-1 flex-row items-center justify-center space-x-8 text-sm font-medium lg:flex",
+        "hidden flex-1 flex-row items-center justify-center space-x-8 text-lg font-medium lg:flex",
         className,
       )}
     >
       {items.map((item, idx) => (
         <a
           onClick={onItemClick}
-          className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200"
+          className="relative px-4 py-2 text-lg text-gray-300 hover:text-white transition-colors duration-200"
           key={`link-${idx}`}
           href={item.link}
         >
           {item.name}
         </a>
       ))}
-    </div>
-  );
-};
-
-export const ShrinkingMobileNav = ({ children, className }: MobileNavProps) => {
-  return (
-    <div
-      className={cn(
-        "relative z-50 mx-auto flex w-full flex-col items-center justify-between bg-black/40 backdrop-blur-md border-b border-white/10 px-6 py-4 lg:hidden",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
-};
-
-export const ShrinkingMobileNavHeader = ({
-  children,
-  className,
-}: MobileNavHeaderProps) => {
-  return (
-    <div
-      className={cn(
-        "flex w-full items-center justify-between",
-        className,
-      )}
-    >
-      {children}
     </div>
   );
 };
@@ -132,11 +84,14 @@ export const ShrinkingMobileNavMenu = ({
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           className={cn(
-            "w-full border-t border-white/10 pt-4 pb-6 space-y-4",
+            "absolute top-full left-0 right-0 bg-black/95 backdrop-blur-md border-b border-white/10",
+            "lg:hidden",
             className,
           )}
         >
-          {children}
+          <div className="px-6 py-6 space-y-4">
+            {children}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
@@ -152,7 +107,7 @@ export const ShrinkingMobileNavToggle = ({
 }) => {
   return (
     <button
-      className="rounded-lg p-2 hover:bg-gray-800 transition-colors"
+      className="lg:hidden rounded-lg p-2 hover:bg-gray-800 transition-colors"
       onClick={onClick}
     >
       {isOpen ? (
@@ -168,7 +123,7 @@ export const ShrinkingNavbarLogo = () => {
   return (
     <a
       href="/"
-      className="relative z-20 flex items-center space-x-2 px-2 py-1 text-sm font-normal"
+      className="relative z-20 flex items-center space-x-2 px-2 py-1 text-lg font-normal"
     >
       <div className="relative">
         <div className="absolute inset-0 rounded-lg bg-gradient-primary blur-sm opacity-60"></div>
@@ -200,7 +155,7 @@ export const ShrinkingNavbarButton = ({
   | React.ComponentPropsWithoutRef<"a">
   | React.ComponentPropsWithoutRef<"button">
 )) => {
-  const baseStyles = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200";
+  const baseStyles = "px-4 py-2 rounded-lg text-lg font-medium transition-all duration-200";
 
   const variantStyles = {
     primary: "bg-gradient-primary text-white hover:opacity-90 shadow-lg",
@@ -218,5 +173,92 @@ export const ShrinkingNavbarButton = ({
     >
       {children}
     </Tag>
+  );
+};
+
+// New unified navbar component that handles responsive behavior
+export const UnifiedNavbar = ({ 
+  navItems, 
+  className,
+  onSignIn,
+  onGetStarted 
+}: {
+  navItems: { name: string; link: string; }[];
+  className?: string;
+  onSignIn?: () => void;
+  onGetStarted?: () => void;
+}) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  return (
+    <ShrinkingNavbar className={className}>
+      <ShrinkingNavBody>
+        <ShrinkingNavbarLogo />
+        
+        {/* Desktop Navigation Items */}
+        <ShrinkingNavItems 
+          items={navItems} 
+          onItemClick={() => setIsMobileMenuOpen(false)}
+        />
+        
+        {/* Desktop Action Buttons */}
+        <div className="hidden lg:flex items-center gap-4">
+          <a
+            onClick={onSignIn}
+            className="relative px-4 py-2 text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+          >
+            Sign In
+          </a>
+          <ShrinkingNavbarButton variant="secondary" onClick={onGetStarted}>
+            Get Started
+          </ShrinkingNavbarButton>
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <ShrinkingMobileNavToggle
+          isOpen={isMobileMenuOpen}
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        />
+      </ShrinkingNavBody>
+
+      {/* Mobile Navigation Menu */}
+      <ShrinkingMobileNavMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      >
+        {navItems.map((item, idx) => (
+          <a
+            key={`mobile-link-${idx}`}
+            href={item.link}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="block text-lg text-gray-300 hover:text-white transition-colors duration-200 py-2"
+          >
+            {item.name}
+          </a>
+        ))}
+        
+        <div className="flex flex-col gap-4 pt-4 border-t border-white/10">
+          <a
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              onSignIn?.();
+            }}
+            className="relative text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+          >
+            Sign In
+          </a>
+          <ShrinkingNavbarButton
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              onGetStarted?.();
+            }}
+            variant="secondary"
+            className="w-fit"
+          >
+            Get Started
+          </ShrinkingNavbarButton>
+        </div>
+      </ShrinkingMobileNavMenu>
+    </ShrinkingNavbar>
   );
 }; 
