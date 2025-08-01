@@ -128,10 +128,30 @@
     @apply border-border;
   }
 
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     @apply bg-background text-foreground overflow-x-hidden;
     background: radial-gradient(ellipse at top, hsl(var(--crypto-blue) / 0.1), hsl(var(--background))),
                 radial-gradient(ellipse at bottom, hsl(var(--crypto-purple) / 0.1), hsl(var(--background)));
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Ensure consistent font rendering across browsers */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* Prevent font size adjustments on mobile */
+  input, textarea, select, button {
+    font-size: 16px;
   }
 }
 
