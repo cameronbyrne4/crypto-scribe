@@ -134,13 +134,13 @@ const AccountArea = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
 
       {/* Dropdown Menu */}
       {isDropdownOpen && (
-        <div className={`absolute bottom-full mb-2 bg-gray-800 border border-white/20 rounded-lg shadow-lg overflow-hidden z-10 ${
+        <div className={`absolute bottom-full mb-2 bg-neutral-900/90 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl overflow-hidden z-10 ${
           isSidebarOpen ? 'left-0 right-0 w-full' : 'left-0 w-64'
         }`}>
           {/* User Email */}
-          <div className="p-3 border-b border-white/20">
+          <div className="p-3 border-b border-white/10 bg-white/5">
             <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-gray-400" />
+              <Mail className="w-4 h-4 text-[#7c45eb]" />
               <span className="text-sm text-gray-300 truncate">{email}</span>
             </div>
           </div>
@@ -148,7 +148,7 @@ const AccountArea = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
           {/* Menu Items */}
           <div className="py-1">
             <button 
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-white/5 transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-[#7c45eb]/10 hover:text-[#7c45eb] transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsDropdownOpen(false);
@@ -160,7 +160,7 @@ const AccountArea = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
             </button>
             
             <button 
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-white/5 transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-[#7c45eb]/10 hover:text-[#7c45eb] transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsDropdownOpen(false);
@@ -172,7 +172,7 @@ const AccountArea = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
             </button>
             
             <button 
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-white/5 transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-[#7c45eb]/10 hover:text-[#7c45eb] transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsDropdownOpen(false);
@@ -184,7 +184,7 @@ const AccountArea = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
             </button>
             
             <button 
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-white/5 transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-[#7c45eb]/10 hover:text-[#7c45eb] transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsDropdownOpen(false);
@@ -196,7 +196,7 @@ const AccountArea = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
             </button>
             
             <button 
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-white/5 transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-[#7c45eb]/10 hover:text-[#7c45eb] transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsDropdownOpen(false);
@@ -209,9 +209,9 @@ const AccountArea = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
           </div>
           
           {/* Sign Out */}
-          <div className="border-t border-white/20">
+          <div className="border-t border-white/10">
             <button 
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsDropdownOpen(false);
