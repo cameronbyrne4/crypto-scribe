@@ -1,6 +1,6 @@
 # Styling Guidelines 
 ## Overview
-This document outlines the visual identity for ChainQuery, focusing on a modern, data-centric aesthetic characterized by dark tones, frosted glass effects, and subtle textures. The design leverages shadcn/ui components as the foundation, customized with our design system for optimal development speed and accessibility.
+This document outlines the visual identity for Nous, focusing on a modern, data-centric aesthetic characterized by dark tones, frosted glass effects, and subtle textures. The design leverages shadcn/ui components as the foundation, customized with our design system for optimal development speed and accessibility.
 
 ## Component Foundation: shadcn/ui Integration
 
@@ -22,7 +22,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Custom ChainQuery colors
+        // Custom Nous colors
         background: "#0D0D10",
         surface: "#1A1A1E", 
         frosted: "rgba(26, 26, 30, 0.5)",

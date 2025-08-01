@@ -5,7 +5,19 @@ import { Button } from "@/components/ui/button";
 const SearchPage = () => {
   return (
     <div className="h-full bg-black/[0.96] p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto relative">
+        {/* Coming Soon Overlay */}
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-xl flex items-center justify-center z-20">
+          <div className="text-center">
+            <div className="text-4xl font-bold text-white mb-4">Coming Soon</div>
+            <div className="text-neutral-400 text-lg max-w-md">
+              You're on the waitlist, don't worry. We'll let you know when it's ready :)
+            </div>
+          </div>
+        </div>
+        
+        {/* Blurred Content */}
+        <div className="blur-sm">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -102,6 +114,7 @@ const SearchPage = () => {
             </p>
           </div>
         </motion.div>
+        </div>
       </div>
     </div>
   );

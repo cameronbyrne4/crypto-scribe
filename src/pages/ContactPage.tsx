@@ -89,7 +89,7 @@ const ContactPage = () => {
               Get in Touch
             </h1>
             <p className="text-xl text-neutral-300 max-w-2xl mx-auto">
-              Have questions about ChainQuery? Want to see a demo? 
+              Have questions about Nous? Want to see a demo? 
               Hit us up.
             </p>
           </motion.div>

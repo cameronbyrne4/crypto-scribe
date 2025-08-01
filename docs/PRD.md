@@ -87,9 +87,9 @@ Mitigation: Use Vercel’s auto-scaling and Supabase’s managed database.
 Risk: User confusion on landing page.
 Mitigation: Include onboarding modal and clear CTA buttons.
 
-# ChainQuery V1 - Product Requirements Document
+# Nous V1 - Product Requirements Document
 
-**Product:** ChainQuery  
+**Product:** Nous  
 **Version:** 1.0 (MVP)  
 **Status:** Scoping  
 **Date:** July 26, 2025
@@ -128,7 +128,7 @@ We are building for users who need on-chain intelligence but lack the specialize
 
 ### Flow 1: Landing Page & New User Onboarding
 
-1. A new user lands on the ChainQuery marketing page
+1. A new user lands on the Nous marketing page
 2. They see the company name and logo (top-left) and navigation tabs for Pricing, Contact, and About Us
 3. They click "Sign Up" in the top-right corner
 4. They create an account (email/password or OAuth social login)
@@ -138,7 +138,7 @@ We are building for users who need on-chain intelligence but lack the specialize
 
 ### Flow 2: The DeFi Trader Seeks Alpha (Returning User)
 
-1. The user navigates to ChainQuery and clicks "Sign In"
+1. The user navigates to Nous and clicks "Sign In"
 2. They enter credentials and land on the main query page
 3. They type: "Show wallets that bridged >$100K from Ethereum to Base in June and swapped for USDC"
 4. The NLP layer parses the query into structured filters (chain, time, value, contract)

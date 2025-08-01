@@ -63,92 +63,105 @@ const AppPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-16 max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-4xl md:text-5xl font-bold mb-6 text-transparent">
-            Welcome to Nous
-          </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            We're putting the finishing touches on your blockchain intelligence dashboard. 
-            Get ready to uncover crypto fraud and compliance using natural language queries.
-          </p>
-          <div className="flex justify-center">
-            <Button
-              onClick={() => navigate("/")}
-              className="bg-[#7c45eb] hover:bg-[#6b3fd8] text-white px-8 py-3"
-            >
-              Explore Features
-            </Button>
+      <div className="container mx-auto px-4 py-16 max-w-4xl relative">
+        {/* Coming Soon Overlay */}
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-xl flex items-center justify-center z-20">
+          <div className="text-center">
+            <div className="text-4xl font-bold text-white mb-4">Coming Soon</div>
+            <div className="text-neutral-400 text-lg max-w-md">
+              You're on the waitlist, don't worry. We'll let you know when it's ready :)
+            </div>
           </div>
-        </motion.div>
-
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                {feature.icon}
-                <span className="text-sm text-[#7c45eb] font-medium">
-                  {feature.status}
-                </span>
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 text-sm">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
         </div>
+        
+        {/* Blurred Content */}
+        <div className="blur-sm">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-4xl md:text-5xl font-bold mb-6 text-transparent">
+              Welcome to Nous
+            </h2>
+            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+              We're putting the finishing touches on your blockchain intelligence dashboard. 
+              Get ready to uncover crypto fraud and compliance using natural language queries.
+            </p>
+            <div className="flex justify-center">
+              <Button
+                onClick={() => navigate("/")}
+                className="bg-[#7c45eb] hover:bg-[#6b3fd8] text-white px-8 py-3"
+              >
+                Explore Features
+              </Button>
+            </div>
+          </motion.div>
 
-        {/* Progress Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm"
-        >
-          <h3 className="text-xl font-semibold text-white mb-4 text-center">
-            Development Progress
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-300">Backend Infrastructure</span>
-              <span className="text-[#7c45eb] font-medium">75%</span>
-            </div>
-            <div className="w-full bg-white/10 rounded-full h-2">
-              <div className="bg-[#7c45eb] h-2 rounded-full" style={{ width: '75%' }}></div>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-gray-300">AI Integration</span>
-              <span className="text-[#7c45eb] font-medium">60%</span>
-            </div>
-            <div className="w-full bg-white/10 rounded-full h-2">
-              <div className="bg-[#7c45eb] h-2 rounded-full" style={{ width: '60%' }}></div>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-gray-300">User Interface</span>
-              <span className="text-[#7c45eb] font-medium">90%</span>
-            </div>
-            <div className="w-full bg-white/10 rounded-full h-2">
-              <div className="bg-[#7c45eb] h-2 rounded-full" style={{ width: '90%' }}></div>
-            </div>
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  {feature.icon}
+                  <span className="text-sm text-[#7c45eb] font-medium">
+                    {feature.status}
+                  </span>
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
+
+          {/* Progress Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm"
+          >
+            <h3 className="text-xl font-semibold text-white mb-4 text-center">
+              Development Progress
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-300">Backend Infrastructure</span>
+                <span className="text-[#7c45eb] font-medium">75%</span>
+              </div>
+              <div className="w-full bg-white/10 rounded-full h-2">
+                <div className="bg-[#7c45eb] h-2 rounded-full" style={{ width: '75%' }}></div>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className="text-gray-300">AI Integration</span>
+                <span className="text-[#7c45eb] font-medium">60%</span>
+              </div>
+              <div className="w-full bg-white/10 rounded-full h-2">
+                <div className="bg-[#7c45eb] h-2 rounded-full" style={{ width: '60%' }}></div>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className="text-gray-300">User Interface</span>
+                <span className="text-[#7c45eb] font-medium">90%</span>
+              </div>
+              <div className="w-full bg-white/10 rounded-full h-2">
+                <div className="bg-[#7c45eb] h-2 rounded-full" style={{ width: '90%' }}></div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );

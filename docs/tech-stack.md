@@ -1,8 +1,8 @@
 # Tech Stack 
-# ChainQuery Tech Stack
+# Nous Tech Stack
 
 ## Overview
-This tech stack supports the ChainQuery MVP, enabling natural language queries for blockchain data (Ethereum and Base), user authentication, SaaS monetization, and a modern UI. The stack is optimized for rapid development using Next.js, Clerk, Supabase, Stripe, and Tailwind CSS, with Vercel for deployment, and is designed to be extensible for future features like cross-chain indexing and real-time alerts.
+This tech stack supports the Nous MVP, enabling natural language queries for blockchain data (Ethereum and Base), user authentication, SaaS monetization, and a modern UI. The stack is optimized for rapid development using Next.js, Clerk, Supabase, Stripe, and Tailwind CSS, with Vercel for deployment, and is designed to be extensible for future features like cross-chain indexing and real-time alerts.
 
 ## Frontend
 

@@ -1,4 +1,4 @@
--- ChainQuery Database Schema
+-- Nous Database Schema
 -- Version 1.0
 -- Optimized for PostgreSQL/Supabase with Clerk authentication integration
 

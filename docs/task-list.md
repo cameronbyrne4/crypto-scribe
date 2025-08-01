@@ -1,6 +1,6 @@
 # Task List & Roadmap 
 
-# ChainQuery MVP - Complete Development Task List
+# Nous MVP - Complete Development Task List
 
 ## Relevant Files
 
@@ -20,7 +20,7 @@
 
 - [ ] 1.0 Foundation & Infrastructure Setup
  - [ ] 1.1 Initialize Next.js 14 project with TypeScript, ESLint, and Tailwind CSS configuration
- - [ ] 1.2 Configure Tailwind CSS with custom ChainQuery color palette and typography (Inter, Fira Code)
+ - [ ] 1.2 Configure Tailwind CSS with custom Nous color palette and typography (Inter, Fira Code)
  - [ ] 1.3 Install and configure shadcn/ui with custom theme tokens for dark mode and frosted glass effects
  - [ ] 1.4 Set up Supabase project and configure environment variables (API keys, database URL)
  - [ ] 1.5 Execute database schema creation script with all tables, indexes, and RLS policies

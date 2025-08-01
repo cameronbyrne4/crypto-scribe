@@ -127,12 +127,13 @@ export const ShrinkingNavbarLogo = () => {
       className="relative z-20 flex items-center space-x-2 px-2 py-1 text-lg font-normal"
     >
       <div className="relative">
-        <div className="absolute inset-0 rounded-lg bg-gradient-primary blur-sm opacity-60"></div>
-        <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-primary">
-          <Database className="w-5 h-5 text-white" />
-        </div>
+        <img 
+          src="/nous-logo.svg" 
+          alt="Nous Logo" 
+          className="w-8 h-8"
+        />
       </div>
-      <span className="font-bold text-white">ChainQuery</span>
+      <span className="font-bold text-white">Nous</span>
     </a>
   );
 };

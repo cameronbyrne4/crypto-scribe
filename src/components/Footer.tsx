@@ -9,16 +9,17 @@ const Footer = () => {
           <div>
             <div className="flex items-center space-x-2">
               <div className="relative">
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#7c45eb] to-[#7c45eb] blur-sm opacity-60"></div>
-                <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-[#7c45eb] to-[#7c45eb]">
-                  <Database className="w-5 h-5 text-white" />
-                </div>
+                <img 
+                  src="/nous-logo.svg" 
+                  alt="Nous Logo" 
+                  className="w-8 h-8"
+                />
               </div>
               <span className="text-lg font-bold text-white">
-                ChainQuery
+                Nous
               </span>
               <span className="text-xs text-muted-foreground">
-                © 2025 ChainQuery. All rights reserved.
+                © 2025 Nous. All rights reserved.
               </span>
             </div>
           </div>
@@ -48,7 +49,7 @@ const Footer = () => {
           {/* Social */}
           <div className="flex items-center justify-end">
             <a 
-              href="https://x.com/chainquery" 
+              href="https://x.com/nous_ai" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-white transition-colors duration-200"

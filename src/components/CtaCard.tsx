@@ -27,7 +27,7 @@ const CtaCard = () => {
             Ready to unlock blockchain intelligence?
           </h2>
           <p className="text-neutral-400 mb-6">
-            Join thousands of users already using ChainQuery to make sense of on-chain data.
+            Join thousands of users already using Nous to make sense of on-chain data.
           </p>
           <div className="flex justify-center">
             <SignedOut>

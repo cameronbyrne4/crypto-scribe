@@ -317,9 +317,11 @@ const AppLayout = () => {
             {isSidebarOpen ? (
               <>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-[#7c45eb] flex items-center justify-center">
-                    <span className="text-white font-semibold text-sm">N</span>
-                  </div>
+                  <img 
+                    src="/nous-logo.svg" 
+                    alt="Nous Logo" 
+                    className="w-8 h-8"
+                  />
                   <span className="text-white font-semibold text-lg">Nous</span>
                 </div>
                 <Button
@@ -349,9 +351,11 @@ const AppLayout = () => {
                   {isLogoHovered ? (
                     <PanelLeftOpen className="h-4 w-4 text-white" />
                   ) : (
-                    <div className="w-6 h-6 rounded-full bg-[#7c45eb] flex items-center justify-center">
-                      <span className="text-white font-semibold text-xs">N</span>
-                    </div>
+                    <img 
+                      src="/nous-logo.svg" 
+                      alt="Nous Logo" 
+                      className="w-6 h-6"
+                    />
                   )}
                 </Button>
               </Tooltip>

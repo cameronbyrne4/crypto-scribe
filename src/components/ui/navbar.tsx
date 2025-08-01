@@ -35,13 +35,14 @@ export const Navbar = ({ className }: NavbarProps) => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="relative">
-              <div className="absolute inset-0 rounded-lg bg-gradient-primary blur-sm opacity-60"></div>
-              <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-primary">
-                <Database className="w-6 h-6 text-white" />
-              </div>
+              <img 
+                src="/nous-logo.svg" 
+                alt="Nous Logo" 
+                className="w-10 h-10"
+              />
             </div>
             <span className="text-xl font-bold gradient-text-primary">
-              ChainQuery
+              Nous
             </span>
           </Link>
 
