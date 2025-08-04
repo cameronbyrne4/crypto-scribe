@@ -140,6 +140,9 @@ const SearchPage = () => {
             : 'No early buyers detected in recent pool creations.';
         } else if (result.analysis?.intent === 'explain_tx') {
           assistantContent = (result.data as any)?.summary || 'Transaction analysis completed.';
+        } else if (result.analysis?.intent === 'wallet_investigation') {
+          const data = result.data as any;
+          assistantContent = `Investigation complete for wallet ${data.wallet_address} on ${data.chain}. Risk score: ${data.risk_score}/100 (${data.risk_level} risk). ${data.summary}`;
         } else {
           assistantContent = 'Analysis completed successfully.';
         }
@@ -435,6 +438,117 @@ const SearchPage = () => {
     );
   };
 
+  const renderWalletInvestigationResults = (data: any, messageId: string) => {
+    if (!data || !data.wallet_address) {
+      return <p className="text-gray-400">Unable to investigate this wallet.</p>;
+    }
+
+    const getRiskColor = (level: string) => {
+      switch (level.toLowerCase()) {
+        case 'high': return 'text-red-400';
+        case 'medium': return 'text-yellow-400';
+        case 'low': return 'text-green-400';
+        default: return 'text-gray-400';
+      }
+    };
+
+    return (
+      <div className="mt-4 space-y-4">
+        {/* Wallet Overview */}
+        <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h4 className="text-white font-medium text-lg">{data.wallet_address}</h4>
+              <p className="text-gray-400 text-sm">{data.chain} • Risk Score: {data.risk_score}/100</p>
+            </div>
+            <div className={`px-3 py-1 rounded-full text-sm font-medium ${getRiskColor(data.risk_level)} bg-white/5`}>
+              {data.risk_level} Risk
+            </div>
+          </div>
+          <p className="text-white text-sm">{data.summary}</p>
+        </div>
+
+        {/* Fund Origins */}
+        <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+          <h5 className="text-white font-medium text-sm mb-3">Fund Origins</h5>
+          <div className="space-y-2">
+            {data.fund_origins.map((origin: any, index: number) => (
+              <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded">
+                <div>
+                  <p className="text-white text-sm font-medium">{origin.source}</p>
+                  <p className="text-gray-400 text-xs">{origin.bridge_protocol} • {new Date(origin.timestamp).toLocaleDateString()}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-white text-sm font-medium">{origin.amount}</p>
+                  <span className={`text-xs ${getRiskColor(origin.risk_indicator)}`}>{origin.risk_indicator}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bridge Activity */}
+        <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+          <h5 className="text-white font-medium text-sm mb-3">Bridge Activity</h5>
+          <div className="space-y-2">
+            {data.bridge_activity.map((bridge: any, index: number) => (
+              <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded">
+                <div>
+                  <p className="text-white text-sm font-medium">{bridge.from_chain} → {bridge.to_chain}</p>
+                  <p className="text-gray-400 text-xs">{bridge.bridge} • {new Date(bridge.timestamp).toLocaleDateString()}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-white text-sm font-medium">{bridge.amount}</p>
+                  <p className="text-gray-400 text-xs">Gas: {bridge.gas_fee}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Suspicious Patterns */}
+        <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+          <h5 className="text-white font-medium text-sm mb-3">Suspicious Patterns</h5>
+          <div className="space-y-3">
+            {data.suspicious_patterns.map((pattern: any, index: number) => (
+              <div key={index} className="p-3 bg-red-500/10 border border-red-500/20 rounded">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-red-400 font-medium text-sm">{pattern.pattern}</h6>
+                  <span className="text-red-400 text-xs">{pattern.confidence}% confidence</span>
+                </div>
+                <p className="text-white text-sm mb-2">{pattern.description}</p>
+                <div className="flex items-center space-x-4 text-xs text-gray-400">
+                  <span>{pattern.transactions} transactions</span>
+                  <span>{pattern.volume} volume</span>
+                  <span>{pattern.timeframe}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="p-4 bg-white/5 rounded-lg border border-white/10">
+          <h5 className="text-white font-medium text-sm mb-3">Recent Activity</h5>
+          <div className="space-y-2">
+            {data.recent_activity.map((activity: any, index: number) => (
+              <div key={index} className={`flex items-center justify-between p-2 rounded ${activity.suspicious ? 'bg-red-500/10 border border-red-500/20' : 'bg-white/5'}`}>
+                <div>
+                  <p className="text-white text-sm font-medium">{activity.action}</p>
+                  <p className="text-gray-400 text-xs">{activity.dex || activity.bridge} • {new Date(activity.timestamp).toLocaleString()}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-white text-sm font-medium">{activity.amount}</p>
+                  {activity.suspicious && <span className="text-red-400 text-xs">Suspicious</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderResults = (analysis: any, data: any, messageId: string) => {
     if (!analysis || !data) return null;
 
@@ -457,14 +571,16 @@ const SearchPage = () => {
         {analysis.intent === 'usdc_inflows' && renderUSDCInflowResults(data, messageId)}
         {analysis.intent === 'early_buyers' && renderEarlyBuyersResults(data, messageId)}
         {analysis.intent === 'explain_tx' && renderTransactionResults(data, messageId)}
+        {analysis.intent === 'wallet_investigation' && renderWalletInvestigationResults(data, messageId)}
       </div>
     );
   };
 
   return (
-    <div className="h-full bg-black/[0.96] flex flex-col relative overflow-hidden">
+    <div className="h-screen bg-black/[0.96] flex flex-col relative">
       {/* Background Nous Logo */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+      {/* Background Nous Logo - Responsive positioning */}
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0 transition-all duration-300 ease-in-out">
         <img 
           src="/nous-logo.svg" 
           alt="Nous" 
@@ -486,35 +602,43 @@ const SearchPage = () => {
                 Hello, Anon
               </h1>
               
-              {/* New Chat Button */}
-              {currentChatId && (
-                <div className="mb-8">
-                  <Button
-                    onClick={startNewChat}
-                    variant="outline"
-                    className="border-white/20 text-white hover:bg-white/10"
-                  >
-                    Start New Chat
-                  </Button>
-                </div>
-              )}
+              
               
               {/* Centered Input */}
               <div className="max-w-2xl mx-auto mb-12">
                 <form onSubmit={handleSubmit} className="relative">
                   <div className="relative">
-                    <input
-                      type="text"
+                    <textarea
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
                       placeholder="Ask anything about blockchain data..."
                       disabled={isLoading}
-                      className="w-full h-16 px-6 pr-16 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#7c45eb]/50 transition-colors text-lg"
+                      rows={1}
+                      className="w-full min-h-[64px] max-h-48 px-6 pr-20 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#7c45eb]/50 transition-all text-lg resize-none"
+                      style={{
+                        height: 'auto',
+                        minHeight: '64px',
+                        maxHeight: '192px',
+                        overflow: 'hidden'
+                      }}
+                      onInput={(e) => {
+                        const target = e.target as HTMLTextAreaElement;
+                        target.style.height = 'auto';
+                        const newHeight = Math.min(target.scrollHeight, 192);
+                        target.style.height = newHeight + 'px';
+                        
+                        // Only show scrollbar when we've reached max height
+                        if (newHeight >= 192) {
+                          target.style.overflow = 'auto';
+                        } else {
+                          target.style.overflow = 'hidden';
+                        }
+                      }}
                     />
                     <Button 
                       type="submit" 
                       disabled={isLoading || !query.trim()}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#7c45eb] hover:bg-[#6b3fd8] text-white rounded-lg p-3 h-12 w-12"
+                      className="absolute right-3 bottom-3 bg-[#7c45eb]/20 backdrop-blur-md border border-[#7c45eb]/30 hover:bg-[#7c45eb]/30 text-white rounded-lg p-3 h-12 w-12 transition-all flex items-center justify-center"
                     >
                       <Send className="w-5 h-5" />
                     </Button>
@@ -545,11 +669,12 @@ const SearchPage = () => {
           </div>
         </div>
       ) : (
-        // Chat interface with bottom input
-        <div className="flex-1 overflow-hidden flex flex-col relative z-10">
-          {/* Chat Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-6 max-w-6xl mx-auto w-full">
-                          {chatHistory.map((message) => (
+        // Chat interface with ChatGPT-style layout
+        <div className="flex-1 flex flex-col relative z-10">
+          {/* Main content area - scrollable to window edge */}
+          <main className="flex-1 overflow-y-auto">
+            <div className="p-4 pt-8 space-y-6 max-w-6xl mx-auto w-full">
+              {chatHistory.map((message) => (
                 <motion.div 
                   key={message.id} 
                   initial={{ opacity: 0, y: 20 }}
@@ -560,7 +685,7 @@ const SearchPage = () => {
                   <div className={`w-full group ${message.type === 'user' ? 'ml-12' : 'mr-12'}`}>
                     <div className={`rounded-lg p-4 ${
                       message.type === 'user' 
-                        ? 'bg-[#7c45eb] text-white ml-auto max-w-md' 
+                        ? 'bg-[#7c45eb]/20 backdrop-blur-md border border-[#7c45eb]/30 text-white ml-auto max-w-md' 
                         : 'bg-white/5 border border-white/10 text-white'
                     }`}>
                       <p className="whitespace-pre-wrap">{message.content}</p>
@@ -685,51 +810,52 @@ const SearchPage = () => {
                 </motion.div>
               ))}
             
-            {/* Loading indicator */}
-            {isLoading && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex justify-start"
-              >
-                <div className="w-full mr-12">
-                  <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                    <div className="flex items-center space-x-2">
-                      <Loader2 className="w-4 h-4 animate-spin text-[#7c45eb]" />
-                      <span className="text-gray-300">Analyzing your query with AI...</span>
+              {/* Loading indicator */}
+              {isLoading && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-start"
+                >
+                  <div className="w-full mr-12">
+                    <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+                      <div className="flex items-center space-x-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-[#7c45eb]" />
+                        <span className="text-gray-300">Analyzing your query with AI...</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
-            
-            <div ref={messagesEndRef} />
-          </div>
+                </motion.div>
+              )}
+              
+              <div ref={messagesEndRef} />
+            </div>
+          </main>
 
-                  {/* Input Area */}
-        <div className="p-4 bg-black/50">
-          <div className="max-w-6xl mx-auto w-full">
-            <form onSubmit={handleSubmit} className="relative">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Ask Nous anything..."
-                  disabled={isLoading}
-                  className="w-full h-12 px-6 pr-16 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#7c45eb]/50 transition-colors text-lg"
-                />
-                <Button 
-                  type="submit" 
-                  disabled={isLoading || !query.trim()}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#7c45eb] hover:bg-[#6b3fd8] text-white rounded-lg p-3 h-8 w-8"
-                >
-                  <Send className="w-4 h-4" />
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
+          {/* Input Area - fixed at bottom */}
+          <footer className="p-4 bg-black/50 border-t border-white/10">
+            <div className="max-w-6xl mx-auto w-full">
+              <form onSubmit={handleSubmit} className="relative">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Ask Nous anything..."
+                    disabled={isLoading}
+                    className="w-full h-12 px-6 pr-16 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#7c45eb]/50 transition-colors text-lg"
+                  />
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading || !query.trim()}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#7c45eb] hover:bg-[#6b3fd8] text-white rounded-lg p-3 h-8 w-8"
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </footer>
         </div>
       )}
     </div>

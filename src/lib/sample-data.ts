@@ -103,6 +103,104 @@ export const sampleData = {
     summary: "This transaction represents a large USDC bridge transfer from Ethereum to Base. The user bridged 50,000 USDC using the official Base bridge contract. The transaction was successful and the funds are now available on Base for DeFi activities.",
     hash: "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
     confidence: 0.95
+  },
+  wallet_investigation: {
+    wallet_address: "5mHH…BrTy",
+    chain: "Solana",
+    risk_score: 85,
+    risk_level: "High",
+    summary: "This wallet shows patterns consistent with potential wash trading and market manipulation. Multiple suspicious activities detected including rapid token swaps, bridge transfers, and coordinated trading patterns.",
+    fund_origins: [
+      {
+        source: "Ethereum Bridge",
+        amount: "$2.4M USDC",
+        timestamp: "2024-07-15T14:30:00Z",
+        bridge_protocol: "Wormhole",
+        source_wallet: "0x8f2a559d...",
+        risk_indicator: "High"
+      },
+      {
+        source: "Binance Hot Wallet",
+        amount: "$850K USDT",
+        timestamp: "2024-07-14T09:15:00Z",
+        bridge_protocol: "Portal Bridge",
+        source_wallet: "0x3f5ce5fb...",
+        risk_indicator: "Medium"
+      }
+    ],
+    bridge_activity: [
+      {
+        from_chain: "Ethereum",
+        to_chain: "Solana",
+        amount: "$2.4M USDC",
+        bridge: "Wormhole",
+        timestamp: "2024-07-15T14:30:00Z",
+        transaction_hash: "0x8f2a559d...",
+        gas_fee: "$45.20"
+      },
+      {
+        from_chain: "BSC",
+        to_chain: "Solana",
+        amount: "$850K USDT",
+        bridge: "Portal Bridge",
+        timestamp: "2024-07-14T09:15:00Z",
+        transaction_hash: "0x3f5ce5fb...",
+        gas_fee: "$12.80"
+      }
+    ],
+    suspicious_patterns: [
+      {
+        pattern: "Wash Trading",
+        confidence: 92,
+        description: "Multiple rapid buy/sell cycles of the same token within short timeframes",
+        transactions: 47,
+        volume: "$890K",
+        timeframe: "Last 7 days"
+      },
+      {
+        pattern: "MEV Bot Activity",
+        confidence: 78,
+        description: "Consistent front-running of large transactions across multiple DEXes",
+        transactions: 23,
+        volume: "$1.2M",
+        timeframe: "Last 7 days"
+      },
+      {
+        pattern: "Pump and Dump",
+        confidence: 85,
+        description: "Coordinated buying followed by immediate large-scale selling",
+        transactions: 12,
+        volume: "$650K",
+        timeframe: "Last 3 days"
+      }
+    ],
+    recent_activity: [
+      {
+        action: "Token Swap",
+        token: "BONK",
+        amount: "$125K",
+        timestamp: "2024-07-26T16:45:00Z",
+        dex: "Raydium",
+        suspicious: true
+      },
+      {
+        action: "Token Swap",
+        token: "JUP",
+        amount: "$89K",
+        timestamp: "2024-07-26T16:42:00Z",
+        dex: "Orca",
+        suspicious: true
+      },
+      {
+        action: "Bridge Transfer",
+        from: "Solana",
+        to: "Ethereum",
+        amount: "$500K USDC",
+        timestamp: "2024-07-26T16:30:00Z",
+        bridge: "Wormhole",
+        suspicious: false
+      }
+    ]
   }
 };
 
@@ -145,6 +243,18 @@ export const processNaturalLanguageQuery = async (query: string) => {
         intent: 'explain_tx',
         confidence: 0.95,
         reasoning: 'Query requested transaction explanation and analysis.'
+      }
+    };
+  }
+  
+  if (lowerQuery.includes('investigate') && lowerQuery.includes('wallet')) {
+    return {
+      success: true,
+      data: sampleData.wallet_investigation,
+      analysis: {
+        intent: 'wallet_investigation',
+        confidence: 0.94,
+        reasoning: 'Query detected wallet investigation request with fund origin and pattern analysis.'
       }
     };
   }
