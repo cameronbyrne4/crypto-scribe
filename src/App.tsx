@@ -47,6 +47,7 @@ const App = () => (
           >
             <Route index element={<AppPage />} />
             <Route path="search" element={<SearchPage />} />
+            <Route path="search/:chatId" element={<SearchPage />} />
             <Route path="history" element={<HistoryPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route path="api-keys" element={<ApiKeysPage />} />

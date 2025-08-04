@@ -1,12 +1,17 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, Download, Copy, ExternalLink, Loader2, Send } from "lucide-react";
+import { Search, Download, Copy, ExternalLink, Loader2, Send, Edit, Share } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { processNaturalLanguageQuery } from "@/lib/sample-data";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SearchPage = () => {
+  const navigate = useNavigate();
+  const { chatId } = useParams();
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [expandedTables, setExpandedTables] = useState<Set<string>>(new Set());
@@ -18,16 +23,68 @@ const SearchPage = () => {
     analysis?: any;
     timestamp: Date;
   }>>([]);
+  const [currentChatId, setCurrentChatId] = useState<string | null>(chatId || null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Generate a unique chat ID
+  const generateChatId = () => {
+    return `chat_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  };
+
+  // Start a new chat
+  const startNewChat = () => {
+    const newChatId = generateChatId();
+    setCurrentChatId(newChatId);
+    setChatHistory([]);
+    navigate(`/app/search/${newChatId}`);
+  };
+
+  // Load chat from localStorage
+  const loadChat = (chatId: string) => {
+    const savedChat = localStorage.getItem(`nous_chat_${chatId}`);
+    if (savedChat) {
+      try {
+        const parsedChat = JSON.parse(savedChat);
+        setChatHistory(parsedChat);
+      } catch (error) {
+        console.error('Error loading chat:', error);
+        setChatHistory([]);
+      }
+    }
+  };
+
+  // Save chat to localStorage
+  const saveChat = (chatId: string, history: any[]) => {
+    localStorage.setItem(`nous_chat_${chatId}`, JSON.stringify(history));
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Handle URL changes and load existing chats
+  useEffect(() => {
+    if (chatId) {
+      setCurrentChatId(chatId);
+      loadChat(chatId);
+    } else {
+      // No chat ID in URL, start fresh
+      setCurrentChatId(null);
+      setChatHistory([]);
+    }
+  }, [chatId]);
+
   useEffect(() => {
     scrollToBottom();
   }, [chatHistory, isLoading]);
+
+  // Save chat whenever history changes
+  useEffect(() => {
+    if (currentChatId && chatHistory.length > 0) {
+      saveChat(currentChatId, chatHistory);
+    }
+  }, [chatHistory, currentChatId]);
 
   const placeholders = [
     "Show me wallets with large USDC inflows on Base in the last 24 hours",
@@ -41,6 +98,13 @@ const SearchPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim() || isLoading) return;
+    
+    // Create new chat ID if this is the first message
+    if (!currentChatId) {
+      const newChatId = generateChatId();
+      setCurrentChatId(newChatId);
+      navigate(`/app/search/${newChatId}`);
+    }
     
     // Add user message to chat
     const userMessageId = Date.now().toString();
@@ -422,6 +486,19 @@ const SearchPage = () => {
                 Hello, Anon
               </h1>
               
+              {/* New Chat Button */}
+              {currentChatId && (
+                <div className="mb-8">
+                  <Button
+                    onClick={startNewChat}
+                    variant="outline"
+                    className="border-white/20 text-white hover:bg-white/10"
+                  >
+                    Start New Chat
+                  </Button>
+                </div>
+              )}
+              
               {/* Centered Input */}
               <div className="max-w-2xl mx-auto mb-12">
                 <form onSubmit={handleSubmit} className="relative">
@@ -446,24 +523,23 @@ const SearchPage = () => {
               </div>
               
               {/* Example queries */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  "Show me wallets with large USDC inflows on Base",
-                  "Find early buyers in new Base pools this week",
-                  "Explain transaction 0x123...",
-                  "Who are the biggest USDC whales today?"
-                ].map((example, index) => (
-                  <motion.button
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    onClick={() => setQuery(example)}
-                    className="p-4 bg-white/5 border border-white/10 rounded-lg text-left hover:bg-white/10 transition-colors"
-                  >
-                    <p className="text-white text-sm">{example}</p>
-                  </motion.button>
-                ))}
+              <div className="w-full">
+                <InfiniteMovingCards
+                  items={[
+                    { quote: "Show me wallets with large USDC inflows on Base" },
+                    { quote: "Find early buyers in new Base pools this week" },
+                    { quote: "Explain transaction 0x123..." },
+                    { quote: "Who are the biggest USDC whales today?" },
+                    { quote: "Show whale activity on Base DEXes today" },
+                    { quote: "Find wallets that got into new Base tokens early" },
+                    { quote: "Trace fund flows from this suspicious address" },
+                    { quote: "Show MEV bot activity in the last hour" }
+                  ]}
+                  direction="left"
+                  speed="fast"
+                  className="w-full"
+                  onItemClick={(quote) => setQuery(quote)}
+                />
               </div>
             </motion.div>
           </div>
@@ -472,37 +548,142 @@ const SearchPage = () => {
         // Chat interface with bottom input
         <div className="flex-1 overflow-hidden flex flex-col relative z-10">
           {/* Chat Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-6">
-            {chatHistory.map((message) => (
-              <motion.div 
-                key={message.id} 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div className={`max-w-4xl ${message.type === 'user' ? 'ml-12' : 'mr-12'}`}>
-                  <div className={`rounded-lg p-4 ${
-                    message.type === 'user' 
-                      ? 'bg-[#7c45eb] text-white ml-auto max-w-md' 
-                      : 'bg-white/5 border border-white/10 text-white'
-                  }`}>
-                    <p className="whitespace-pre-wrap">{message.content}</p>
+          <div className="flex-1 overflow-y-auto p-4 space-y-6 max-w-6xl mx-auto w-full">
+                          {chatHistory.map((message) => (
+                <motion.div 
+                  key={message.id} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`w-full group ${message.type === 'user' ? 'ml-12' : 'mr-12'}`}>
+                    <div className={`rounded-lg p-4 ${
+                      message.type === 'user' 
+                        ? 'bg-[#7c45eb] text-white ml-auto max-w-md' 
+                        : 'bg-white/5 border border-white/10 text-white'
+                    }`}>
+                      <p className="whitespace-pre-wrap">{message.content}</p>
+                      
+                      {/* Render data visualization for assistant messages */}
+                      {message.type === 'assistant' && message.data && message.analysis && 
+                        renderResults(message.analysis, message.data, message.id)
+                      }
+                    </div>
                     
-                    {/* Render data visualization for assistant messages */}
-                    {message.type === 'assistant' && message.data && message.analysis && 
-                      renderResults(message.analysis, message.data, message.id)
-                    }
+                    {/* Message actions */}
+                    <div className={`flex items-center gap-2 mt-2 ${
+                      message.type === 'user' ? 'justify-end' : 'justify-start'
+                    }`}>
+                      {/* User message actions (hover only) */}
+                      {message.type === 'user' && (
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 text-gray-400 hover:!text-foreground hover:!bg-transparent"
+                                onClick={() => navigator.clipboard.writeText(message.content)}
+                              >
+                                <Copy className="w-3 h-3" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Copy</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 text-gray-400 hover:!text-foreground hover:!bg-transparent"
+                                onClick={() => setQuery(message.content)}
+                              >
+                                <Edit className="w-3 h-3" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Edit</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </div>
+                      )}
+                      
+                      {/* Assistant message actions (always visible) */}
+                      {message.type === 'assistant' && (
+                        <div className="flex items-center gap-1">
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 text-gray-400 hover:!text-foreground hover:!bg-transparent"
+                                onClick={() => navigator.clipboard.writeText(message.content)}
+                              >
+                                <Copy className="w-3 h-3" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Copy</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 text-gray-400 hover:!text-foreground hover:!bg-transparent"
+                                onClick={() => {
+                                  // Share functionality
+                                  if (navigator.share) {
+                                    navigator.share({
+                                      title: 'Nous AI Response',
+                                      text: message.content
+                                    });
+                                  } else {
+                                    navigator.clipboard.writeText(message.content);
+                                  }
+                                }}
+                              >
+                                <Share className="w-3 h-3" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Share</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 text-gray-400 hover:!text-foreground hover:!bg-transparent"
+                                onClick={() => {
+                                  // Download as text file
+                                  const blob = new Blob([message.content], { type: 'text/plain' });
+                                  const url = URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = `nous-response-${Date.now()}.txt`;
+                                  a.click();
+                                  URL.revokeObjectURL(url);
+                                }}
+                              >
+                                <Download className="w-3 h-3" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Download</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  
-                  <div className={`text-xs text-gray-400 mt-2 ${
-                    message.type === 'user' ? 'text-right' : 'text-left'
-                  }`}>
-                    {message.timestamp.toLocaleTimeString()}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
             
             {/* Loading indicator */}
             {isLoading && (
@@ -511,7 +692,7 @@ const SearchPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex justify-start"
               >
-                <div className="max-w-4xl mr-12">
+                <div className="w-full mr-12">
                   <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                     <div className="flex items-center space-x-2">
                       <Loader2 className="w-4 h-4 animate-spin text-[#7c45eb]" />
@@ -525,29 +706,30 @@ const SearchPage = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
-          <div className="border-t border-white/10 p-4 bg-black/50">
-            <div className="max-w-4xl mx-auto">
-              <form onSubmit={handleSubmit} className="flex items-center space-x-4">
-                <div className="flex-1">
-                  <PlaceholdersAndVanishInput
-                    placeholders={placeholders}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onSubmit={handleSubmit}
-                    disabled={isLoading}
-                  />
-                </div>
+                  {/* Input Area */}
+        <div className="p-4 bg-black/50">
+          <div className="max-w-6xl mx-auto w-full">
+            <form onSubmit={handleSubmit} className="relative">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Ask Nous anything..."
+                  disabled={isLoading}
+                  className="w-full h-12 px-6 pr-16 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#7c45eb]/50 transition-colors text-lg"
+                />
                 <Button 
                   type="submit" 
                   disabled={isLoading || !query.trim()}
-                  className="bg-[#7c45eb] hover:bg-[#6b3fd8] text-white"
-                  size="sm"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#7c45eb] hover:bg-[#6b3fd8] text-white rounded-lg p-3 h-8 w-8"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
+        </div>
         </div>
       )}
     </div>
