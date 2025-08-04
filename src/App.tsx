@@ -15,6 +15,10 @@ import SettingsPage from "./pages/app/SettingsPage";
 import ApiKeysPage from "./pages/app/ApiKeysPage";
 import ContactPage from "./pages/ContactPage";
 import PricingPage from "./pages/PricingPage";
+import DemoPage from "./pages/DemoPage";
+import DemoSearchPage from "./pages/DemoSearchPage";
+import TestPage from "./pages/TestPage";
+import SimpleDemoPage from "./pages/SimpleDemoPage";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +58,9 @@ const App = () => (
           </Route>
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/demo" element={<DemoPage />} />
+          <Route path="/demo/search" element={<DemoSearchPage />} />
+          <Route path="/test" element={<TestPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

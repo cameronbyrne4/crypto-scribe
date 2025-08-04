@@ -41,6 +41,10 @@ const Index = () => {
       link: "/#features",
     },
     {
+      name: "Demo",
+      link: "/demo",
+    },
+    {
       name: "Pricing",
       link: "/pricing",
     },
