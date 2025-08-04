@@ -398,25 +398,25 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="h-full bg-black/[0.96] flex flex-col">
+    <div className="h-full bg-black/[0.96] flex flex-col relative overflow-hidden">
+      {/* Background Nous Logo */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+        <img 
+          src="/nous-logo.svg" 
+          alt="Nous" 
+          className="w-[800px] h-[800px] opacity-5 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)]"
+        />
+      </div>
+      
       {chatHistory.length === 0 ? (
         // Welcome screen with centered input (like ChatGPT)
-        <div className="flex-1 flex flex-col items-center justify-center p-4">
+        <div className="flex-1 flex flex-col items-center justify-center p-4 relative z-10">
           <div className="max-w-3xl w-full text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              {/* Nous Logo */}
-              <div className="mb-6">
-                <img 
-                  src="/nous-logo.svg" 
-                  alt="Nous" 
-                  className="w-16 h-16 mx-auto mb-4"
-                />
-              </div>
-              
               {/* Personalized Greeting */}
               <h1 className="text-5xl font-bold text-white mb-8">
                 Hello, Anon
@@ -470,7 +470,7 @@ const SearchPage = () => {
         </div>
       ) : (
         // Chat interface with bottom input
-        <div className="flex-1 overflow-hidden flex flex-col">
+        <div className="flex-1 overflow-hidden flex flex-col relative z-10">
           {/* Chat Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-6">
             {chatHistory.map((message) => (
