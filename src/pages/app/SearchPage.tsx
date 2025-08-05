@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, Download, Copy, ExternalLink, Loader2, Send, Edit, Share } from "lucide-react";
+import { Search, Download, Copy, ExternalLink, Loader2, Send, Edit, Share, X, BarChart3, AlertTriangle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
@@ -8,6 +8,7 @@ import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { processNaturalLanguageQuery } from "@/lib/sample-data";
 import { useNavigate, useParams } from "react-router-dom";
+import FlowDiagram from "@/components/FlowDiagram";
 
 const SearchPage = () => {
   const navigate = useNavigate();
@@ -25,7 +26,64 @@ const SearchPage = () => {
   }>>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(chatId || null);
   
+  // Artifact panel state
+  const [artifactState, setArtifactState] = useState({
+    isOpen: false,
+    currentArtifact: null,
+    activeTab: 'flow'
+  });
+  
+  // Resize state
+  const [isResizing, setIsResizing] = useState(false);
+  const [artifactWidth, setArtifactWidth] = useState(60); // percentage
+  const resizeStartRef = useRef<{ startX: number; startWidth: number } | null>(null);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Resize handlers
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+    resizeStartRef.current = {
+      startX: e.clientX,
+      startWidth: artifactWidth
+    };
+  };
+  
+  const handleResizeMove = (e: MouseEvent) => {
+    if (!isResizing || !resizeStartRef.current) return;
+    
+    const container = document.querySelector('.h-screen') as HTMLElement;
+    if (!container) return;
+    
+    const containerRect = container.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const deltaX = e.clientX - resizeStartRef.current.startX;
+    const deltaPercent = (deltaX / containerWidth) * 100;
+    
+    // Calculate new width based on relative movement
+    const newWidth = Math.max(30, Math.min(80, resizeStartRef.current.startWidth - deltaPercent));
+    setArtifactWidth(newWidth);
+    
+    // Prevent text selection during drag
+    e.preventDefault();
+  };
+  
+  const handleResizeEnd = () => {
+    setIsResizing(false);
+  };
+  
+  // Add/remove global mouse event listeners
+  useEffect(() => {
+    if (isResizing) {
+      document.addEventListener('mousemove', handleResizeMove);
+      document.addEventListener('mouseup', handleResizeEnd);
+      return () => {
+        document.removeEventListener('mousemove', handleResizeMove);
+        document.removeEventListener('mouseup', handleResizeEnd);
+      };
+    }
+  }, [isResizing]);
 
   // Generate a unique chat ID
   const generateChatId = () => {
@@ -142,7 +200,20 @@ const SearchPage = () => {
           assistantContent = (result.data as any)?.summary || 'Transaction analysis completed.';
         } else if (result.analysis?.intent === 'wallet_investigation') {
           const data = result.data as any;
-          assistantContent = `Investigation complete for wallet ${data.wallet_address} on ${data.chain}. Risk score: ${data.risk_score}/100 (${data.risk_level} risk). ${data.summary}`;
+          assistantContent = `🔍 **Wallet Investigation Complete**
+
+**Wallet**: \`${data.wallet_address}\` on ${data.chain}
+**Risk Score**: ${data.risk_score}/100 
+**Status**: ${data.risk_level === 'High' ? '🚨 High Risk' : data.risk_level === 'Medium' ? '⚠️ Medium Risk' : '✅ Low Risk'}
+
+**Key Findings**:
+• ${data.fund_origins.length} fund sources identified
+• ${data.suspicious_patterns.length} suspicious patterns detected
+• ${data.bridge_activity.length} cross-chain transactions traced
+
+**Summary**: ${data.summary}
+
+Click the artifact below for detailed analysis including transaction history, risk patterns, and fund flow visualization.`;
         } else {
           assistantContent = 'Analysis completed successfully.';
         }
@@ -217,7 +288,7 @@ const SearchPage = () => {
       setExpandedTables(newExpanded);
     };
 
-    return (
+  return (
       <div className="overflow-x-auto mt-4">
         <div className="flex items-center justify-between mb-3">
           <h4 className="text-white font-medium text-sm">
@@ -233,7 +304,7 @@ const SearchPage = () => {
               {isExpanded ? 'Show Less' : `Show All ${data.wallets.length}`}
             </Button>
           )}
-        </div>
+            </div>
         
         <table className="w-full text-sm">
           <thead>
@@ -576,8 +647,233 @@ const SearchPage = () => {
     );
   };
 
+  // Artifact Preview Card Component
+  const ArtifactPreviewCard = ({ data, onClick }: { data: any; onClick: () => void }) => (
+    <div
+      className={`mt-4 p-4 bg-white/5 border rounded-lg cursor-pointer hover:bg-white/10 transition-all group ${
+        artifactState.isOpen && artifactState.currentArtifact === data
+          ? 'border-[#7c45eb] shadow-[0_0_10px_rgba(124,69,235,0.3)]'
+          : 'border-white/10'
+      }`}
+      onClick={onClick}
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <div className="p-2 bg-[#7c45eb]/20 rounded-lg">
+            <BarChart3 className="w-5 h-5 text-[#7c45eb]" />
+          </div>
+          <div>
+            <h4 className="text-white font-medium">Cross-Chain Flow Analysis</h4>
+            <p className="text-gray-400 text-sm">Wallet {data.wallet_address} • {data.fund_origins.length} sources traced</p>
+          </div>
+        </div>
+        <ArrowRight className="w-4 h-4 text-gray-400" />
+      </div>
+    </div>
+  );
+
+  // Artifact Panel Component
+  const ArtifactPanel = ({ isOpen, onClose, data }: { isOpen: boolean; onClose: () => void; data: any }) => (
+    <div
+      className="flex-shrink-0 h-full bg-black/[0.98] border-l border-white/10 overflow-hidden"
+      style={{ 
+        width: isOpen ? `${artifactWidth}%` : 0,
+        transition: isResizing ? 'none' : 'width 0.3s ease-in-out'
+      }}
+    >
+            {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b border-white/10">
+        <div>
+          <div className="flex items-center space-x-3">
+            <h2 className="text-xl font-semibold text-white">Cross-Chain Flow Analysis</h2>
+            <div className="flex items-center space-x-1">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0 text-gray-400 hover:!text-foreground hover:!bg-transparent"
+                  >
+                    <Copy className="w-3 h-3" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Copy</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+              <Button 
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0 text-gray-400 hover:!text-foreground hover:!bg-transparent"
+              >
+                    <Download className="w-3 h-3" />
+              </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Download</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </div>
+          <p className="text-gray-400">Wallet {data?.wallet_address}</p>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onClose}
+          className="text-gray-400 hover:text-white hover:bg-white/10"
+        >
+          <X className="w-5 h-5" />
+        </Button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex border-b border-white/10">
+        {['flow', 'transactions', 'risk'].map((tab) => (
+          <button
+            key={tab}
+            className={`px-6 py-3 text-sm font-medium transition-colors ${
+              artifactState.activeTab === tab
+                ? 'text-white border-b-2 border-[#7c45eb]'
+                : 'text-gray-400 hover:text-white'
+            }`}
+            onClick={() => {
+              setArtifactState(prev => ({ ...prev, activeTab: tab }));
+              // Scroll to section within the scrollable container
+              const section = document.getElementById(`${tab}-section`) as HTMLElement;
+              const container = section?.closest('.overflow-y-auto') as HTMLElement;
+              if (section && container) {
+                const scrollTop = section.offsetTop - container.offsetTop - 20; // 20px offset
+                container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+              }
+            }}
+          >
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Content */}
+      <div className="p-6 pb-12 h-[calc(100vh-120px)] overflow-y-auto">
+        {/* Flow Section */}
+        <div id="flow-section" className="mb-12">
+          <h3 className="text-lg font-semibold text-white mb-4">Flow Diagram</h3>
+          <div className="h-[600px] w-full">
+            <FlowDiagram data={data} />
+          </div>
+        </div>
+        
+        {/* Transactions Section */}
+        <div id="transactions-section" className="mb-12">
+          <h3 className="text-lg font-semibold text-white mb-4">Transaction History</h3>
+          {data && (
+            <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-white/10">
+                      <th className="text-left p-4 text-white font-medium">From Chain</th>
+                      <th className="text-left p-4 text-white font-medium">To Chain</th>
+                      <th className="text-left p-4 text-white font-medium">Bridge</th>
+                      <th className="text-left p-4 text-white font-medium">Date</th>
+                      <th className="text-right p-4 text-white font-medium">Amount</th>
+                      <th className="text-right p-4 text-white font-medium">Gas</th>
+                      <th className="text-left p-4 text-white font-medium">Transaction Hash</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.bridge_activity?.map((tx: any, index: number) => (
+                      <tr key={index} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                        <td className="p-4 text-white">{tx.from_chain}</td>
+                        <td className="p-4 text-white">{tx.to_chain}</td>
+                        <td className="p-4 text-gray-300">{tx.bridge}</td>
+                        <td className="p-4 text-gray-300">{new Date(tx.timestamp).toLocaleDateString()}</td>
+                        <td className="p-4 text-right text-white font-medium">{tx.amount}</td>
+                        <td className="p-4 text-right text-gray-300">{tx.gas_fee}</td>
+                        <td className="p-4 text-gray-400 text-xs font-mono">{tx.transaction_hash}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Risk Section */}
+        <div id="risk-section" className="mb-12">
+          <h3 className="text-lg font-semibold text-white mb-4">Risk Analysis</h3>
+          {data && (
+            <div className="space-y-4">
+              {/* Risk Overview */}
+              <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-white font-medium">Overall Risk Assessment</h4>
+                  <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    data.risk_level === 'High' ? 'text-red-400 bg-red-400/10' :
+                    data.risk_level === 'Medium' ? 'text-yellow-400 bg-yellow-400/10' :
+                    'text-green-400 bg-green-400/10'
+                  }`}>
+                    {data.risk_level} Risk
+                  </div>
+                </div>
+                <p className="text-gray-300 text-sm">{data.summary}</p>
+              </div>
+              
+              {/* Suspicious Patterns */}
+              <div>
+                <h4 className="text-white font-medium mb-3">Suspicious Patterns</h4>
+                <div className="space-y-4">
+                  {data.suspicious_patterns?.map((pattern: any, index: number) => (
+                    <div key={index} className="border-l-4 border-red-400/50 pl-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <h5 className="text-red-400 font-medium">{pattern.pattern}</h5>
+                        <span className="text-red-400 text-sm">{pattern.confidence}% confidence</span>
+                      </div>
+                      <p className="text-white text-sm mb-2">{pattern.description}</p>
+                      <div className="text-xs text-gray-400">
+                        {pattern.transactions} transactions • {pattern.volume} • {pattern.timeframe}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Fund Origins */}
+              <div>
+                <h4 className="text-white font-medium mb-3">Fund Origins</h4>
+                <div className="space-y-3">
+                  {data.fund_origins?.map((origin: any, index: number) => (
+                    <div key={index} className="flex items-center justify-between py-2 border-b border-white/5 last:border-b-0">
+                      <div>
+                        <div className="text-white font-medium">{origin.source}</div>
+                        <div className="text-gray-400 text-sm">{origin.bridge_protocol} • {new Date(origin.timestamp).toLocaleDateString()}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-white font-medium">{origin.amount}</div>
+                        <div className={`text-xs px-2 py-1 rounded-full ${
+                          origin.risk_indicator === 'High' ? 'text-red-400 bg-red-400/10' :
+                          origin.risk_indicator === 'Medium' ? 'text-yellow-400 bg-yellow-400/10' :
+                          'text-green-400 bg-green-400/10'
+                        }`}>
+                          {origin.risk_indicator} Risk
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="h-screen bg-black/[0.96] flex flex-col relative">
+    <div className="h-screen bg-black/[0.96] flex relative">
       {/* Background Nous Logo */}
       {/* Background Nous Logo - Responsive positioning */}
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0 transition-all duration-300 ease-in-out">
@@ -592,9 +888,9 @@ const SearchPage = () => {
         // Welcome screen with centered input (like ChatGPT)
         <div className="flex-1 flex flex-col items-center justify-center p-4 relative z-10">
           <div className="max-w-3xl w-full text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
               {/* Personalized Greeting */}
@@ -644,8 +940,8 @@ const SearchPage = () => {
                     </Button>
                   </div>
                 </form>
-              </div>
-              
+          </div>
+          
               {/* Example queries */}
               <div className="w-full">
                 <InfiniteMovingCards
@@ -670,7 +966,9 @@ const SearchPage = () => {
         </div>
       ) : (
         // Chat interface with ChatGPT-style layout
-        <div className="flex-1 flex flex-col relative z-10">
+        <div className={`flex-1 flex flex-col relative z-10 transition-all duration-300 ease-in-out ${
+          artifactState.isOpen ? 'min-w-0' : 'w-full'
+        }`}>
           {/* Main content area - scrollable to window edge */}
           <main className="flex-1 overflow-y-auto">
             <div className="p-4 pt-8 space-y-6 max-w-6xl mx-auto w-full">
@@ -688,10 +986,75 @@ const SearchPage = () => {
                         ? 'bg-[#7c45eb]/20 backdrop-blur-md border border-[#7c45eb]/30 text-white ml-auto max-w-md' 
                         : 'bg-white/5 border border-white/10 text-white'
                     }`}>
-                      <p className="whitespace-pre-wrap">{message.content}</p>
+                      {message.analysis?.intent === 'wallet_investigation' ? (
+                        <div className="space-y-3">
+                          <div className="flex items-center space-x-2 mb-3">
+                            <div className="p-2 bg-[#7c45eb]/20 rounded-lg">
+                              <AlertTriangle className="w-4 h-4 text-[#7c45eb]" />
+                            </div>
+                            <h3 className="text-white font-semibold">Wallet Investigation Complete</h3>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-gray-400">Wallet:</span>
+                              <code className="px-2 py-1 bg-white/10 rounded text-white text-sm font-mono">
+                                {message.data?.wallet_address}
+                              </code>
+                              <span className="text-gray-400">on {message.data?.chain}</span>
+                            </div>
+                            
+                            <div className="flex items-center space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <span className="text-gray-400">Risk Score:</span>
+                                <span className="text-white font-medium">{message.data?.risk_score}/100</span>
+                              </div>
+                              <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                message.data?.risk_level === 'High' ? 'text-red-400 bg-red-400/10' :
+                                message.data?.risk_level === 'Medium' ? 'text-yellow-400 bg-yellow-400/10' :
+                                'text-green-400 bg-green-400/10'
+                              }`}>
+                                {message.data?.risk_level} Risk
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-3 gap-4 pt-2">
+                              <div className="text-center p-3 bg-white/5 rounded-lg">
+                                <div className="text-white font-semibold">{message.data?.fund_origins?.length || 0}</div>
+                                <div className="text-gray-400 text-xs">Fund Sources</div>
+                              </div>
+                              <div className="text-center p-3 bg-white/5 rounded-lg">
+                                <div className="text-white font-semibold">{message.data?.suspicious_patterns?.length || 0}</div>
+                                <div className="text-gray-400 text-xs">Suspicious Patterns</div>
+                              </div>
+                              <div className="text-center p-3 bg-white/5 rounded-lg">
+                                <div className="text-white font-semibold">{message.data?.bridge_activity?.length || 0}</div>
+                                <div className="text-gray-400 text-xs">Transactions</div>
+                              </div>
+                            </div>
+                            
+                            <p className="text-gray-300 text-sm pt-2">{message.data?.summary}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="whitespace-pre-wrap">{message.content}</p>
+                      )}
                       
-                      {/* Render data visualization for assistant messages */}
+                      {/* Artifact Preview Card for wallet investigation - appears after text response */}
+                      {message.type === 'assistant' && message.analysis?.intent === 'wallet_investigation' && (
+                        <ArtifactPreviewCard
+                          data={message.data}
+                          onClick={() => setArtifactState({
+                            isOpen: true,
+                            currentArtifact: message.data,
+                            activeTab: 'flow'
+                          })}
+                        />
+                      )}
+                      
+                      {/* Render data visualization for assistant messages (excluding wallet investigation - moved to artifact) */}
                       {message.type === 'assistant' && message.data && message.analysis && 
+                        message.analysis.intent !== 'wallet_investigation' && 
                         renderResults(message.analysis, message.data, message.id)
                       }
                     </div>
@@ -806,15 +1169,15 @@ const SearchPage = () => {
                         </div>
                       )}
                     </div>
-                  </div>
-                </motion.div>
+          </div>
+        </motion.div>
               ))}
-            
+
               {/* Loading indicator */}
               {isLoading && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
                   className="flex justify-start"
                 >
                   <div className="w-full mr-12">
@@ -824,8 +1187,8 @@ const SearchPage = () => {
                         <span className="text-gray-300">Analyzing your query with AI...</span>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
+          </div>
+        </motion.div>
               )}
               
               <div ref={messagesEndRef} />
@@ -833,7 +1196,7 @@ const SearchPage = () => {
           </main>
 
           {/* Input Area - fixed at bottom */}
-          <footer className="p-4 bg-black/50 border-t border-white/10">
+          <footer className="p-4">
             <div className="max-w-6xl mx-auto w-full">
               <form onSubmit={handleSubmit} className="relative">
                 <div className="relative">
@@ -858,6 +1221,24 @@ const SearchPage = () => {
           </footer>
         </div>
       )}
+      
+      {/* Resizable Border Divider */}
+      {artifactState.isOpen && (
+        <div 
+          className="flex-shrink-0 w-0.5 bg-white/10 hover:bg-white/20 transition-colors cursor-col-resize relative group"
+          onMouseDown={handleResizeStart}
+        >
+          {/* Resize handle pill */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-6 bg-white/30 rounded-full" />
+      </div>
+      )}
+      
+      {/* Artifact Panel */}
+      <ArtifactPanel
+        isOpen={artifactState.isOpen}
+        onClose={() => setArtifactState(prev => ({ ...prev, isOpen: false }))}
+        data={artifactState.currentArtifact}
+      />
     </div>
   );
 };

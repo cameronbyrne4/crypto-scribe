@@ -101,10 +101,6 @@ Dark Gray
 #34343c
 bg-[#34343c]
 Dark surfaces, borders
-Warning
-#FFC700
-bg-yellow-500
-Warning alerts, badges
 Error
 #F87171
 bg-destructive
