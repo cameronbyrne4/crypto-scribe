@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   UnifiedNavbar,
 } from "@/components/ui/shrinking-navbar";
-import { SignedIn, SignedOut, SignUpButton } from "@clerk/clerk-react";
+// Authentication imports removed for waitlist mode
 import { GridBackground } from "@/components/ui/grid-background";
 import { GlowingCardEffect } from "@/components/ui/glowing-card-effect";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Switch } from "@/components/ui/switch";
 import Footer from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
-import { getAppRoute } from "@/lib/utils";
+// getAppRoute removed for waitlist mode
 import { 
   CheckCircle, 
   Zap, 
@@ -262,29 +262,14 @@ const PricingPage = () => {
                               {isComingSoon ? "Coming Soon" : plan.ctaText}
                             </GradientButton>
                           ) : (
-                            <>
-                              <SignedOut>
-                                <SignUpButton mode="modal">
-                                  <GradientButton
-                                    variant={plan.isPopular ? "primary" : "secondary"}
-                                    className="w-full cursor-pointer"
-                                    disabled={isComingSoon}
-                                  >
-                                    {isComingSoon ? "Coming Soon" : plan.ctaText}
-                                  </GradientButton>
-                                </SignUpButton>
-                              </SignedOut>
-                              <SignedIn>
-                                <GradientButton
-                                  onClick={() => navigate(getAppRoute())}
-                                  variant={plan.isPopular ? "primary" : "secondary"}
-                                  className="w-full cursor-pointer"
-                                  disabled={isComingSoon}
-                                >
-                                  Go to Dashboard
-                                </GradientButton>
-                              </SignedIn>
-                            </>
+                            <GradientButton
+                              onClick={() => navigate("/waitlist")}
+                              variant={plan.isPopular ? "primary" : "secondary"}
+                              className="w-full cursor-pointer"
+                              disabled={isComingSoon}
+                            >
+                              {isComingSoon ? "Coming Soon" : plan.ctaText}
+                            </GradientButton>
                           )}
                         </div>
                         

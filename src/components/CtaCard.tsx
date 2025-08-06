@@ -1,13 +1,10 @@
 // CtaCard.tsx
-// Reusable call-to-action card for prompting users to sign up. Used at the end of PricingPage and LandingPage.
-// If you want to customize text or actions, refactor to accept props.
+// Reusable call-to-action card for prompting users to join waitlist. Used at the end of PricingPage and LandingPage.
 
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { ArrowRight } from "lucide-react";
-import { SignedIn, SignedOut, SignUpButton } from "@clerk/clerk-react";
-import { getAppRoute } from "@/lib/utils";
 
 const CtaCard = () => {
   const navigate = useNavigate();
@@ -31,25 +28,13 @@ const CtaCard = () => {
             Join thousands of users already using Nous to make sense of on-chain data.
           </p>
           <div className="flex justify-center">
-            <SignedOut>
-              <SignUpButton mode="modal">
-                <HoverBorderGradient
-                  className="text-base px-6 py-2 flex items-center gap-2 cursor-pointer"
-                >
-                  Start Free Today
-                  <ArrowRight className="w-4 h-4" />
-                </HoverBorderGradient>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <HoverBorderGradient
-                onClick={() => navigate(getAppRoute())}
-                className="text-base px-6 py-2 flex items-center gap-2 cursor-pointer"
-              >
-                Go to Dashboard
-                <ArrowRight className="w-4 h-4" />
-              </HoverBorderGradient>
-            </SignedIn>
+            <HoverBorderGradient
+              onClick={() => navigate("/waitlist")}
+              className="text-base px-6 py-2 flex items-center gap-2 cursor-pointer"
+            >
+              Start Free Today
+              <ArrowRight className="w-4 h-4" />
+            </HoverBorderGradient>
           </div>
         </div>
       </div>

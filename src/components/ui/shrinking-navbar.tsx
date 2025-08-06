@@ -1,9 +1,8 @@
-import { cn, getAppRoute } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Database } from "lucide-react";
 import React, { useState } from "react";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -209,24 +208,9 @@ export const UnifiedNavbar = ({
           <div className="flex justify-end items-center gap-4">
             {/* Desktop Action Buttons */}
             <div className="hidden lg:flex items-center gap-4">
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="relative px-4 py-2 text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer">
-                    Sign In
-                  </button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <ShrinkingNavbarButton variant="secondary">
-                    Get Started
-                  </ShrinkingNavbarButton>
-                </SignUpButton>
-              </SignedOut>
-              <SignedIn>
-                <ShrinkingNavbarButton href={getAppRoute()} variant="secondary">
-                  Try Nous
-                </ShrinkingNavbarButton>
-                <UserButton afterSignOutUrl="/" />
-              </SignedIn>
+              <ShrinkingNavbarButton href="/waitlist" variant="secondary">
+                Join Waitlist
+              </ShrinkingNavbarButton>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -255,38 +239,14 @@ export const UnifiedNavbar = ({
         ))}
         
         <div className="flex flex-col gap-4 pt-4 border-t border-white/10">
-          <SignedOut>
-            <SignInButton mode="modal">
-              <button 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-lg text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer text-left"
-              >
-                Sign In
-              </button>
-            </SignInButton>
-            <SignUpButton mode="modal">
-              <ShrinkingNavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="secondary"
-                className="w-fit"
-              >
-                Get Started
-              </ShrinkingNavbarButton>
-            </SignUpButton>
-          </SignedOut>
-          <SignedIn>
-            <ShrinkingNavbarButton
-              href={getAppRoute()}
-              variant="secondary"
-              className="w-fit"
-            >
-              Try Nous
-            </ShrinkingNavbarButton>
-            <div className="flex items-center gap-2">
-              <UserButton afterSignOutUrl="/" />
-              <span className="text-lg text-gray-300">Account</span>
-            </div>
-          </SignedIn>
+          <ShrinkingNavbarButton
+            href="/waitlist"
+            onClick={() => setIsMobileMenuOpen(false)}
+            variant="secondary"
+            className="w-fit"
+          >
+            Join Waitlist
+          </ShrinkingNavbarButton>
         </div>
       </ShrinkingMobileNavMenu>
     </ShrinkingNavbar>

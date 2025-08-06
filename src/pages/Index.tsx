@@ -4,7 +4,7 @@ import React from "react";
 import {
   UnifiedNavbar,
 } from "@/components/ui/shrinking-navbar";
-import { SignedIn, SignedOut, SignUpButton } from "@clerk/clerk-react";
+// Authentication imports removed for waitlist mode
 import { GridBackground } from "@/components/ui/grid-background";
 import { AppleCards } from "@/components/ui/apple-cards";
 import { EvervaultCard } from "@/components/ui/evervault-card";
@@ -15,7 +15,7 @@ import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
-import { getAppRoute } from "@/lib/utils";
+// getAppRoute removed for waitlist mode
 import { 
   Search, 
   Shield, 
@@ -108,7 +108,7 @@ const Index = () => {
       description: "Ask complex blockchain questions in plain English and get instant, accurate answers without any technical expertise.",
       image: "/feature-natural-language.svg",
       cta: "Try a Query",
-      ctaLink: "/auth/signup"
+      ctaLink: "/waitlist"
     },
     {
       id: "cross-chain",
@@ -116,7 +116,7 @@ const Index = () => {
       description: "Trace transactions across multiple blockchains with complete flow visibility and entity identification.",
       image: "/feature-cross-chain.svg",
       cta: "Explore Networks",
-      ctaLink: "/auth/signup"
+      ctaLink: "/waitlist"
     },
     {
       id: "entity-labeling",
@@ -124,7 +124,7 @@ const Index = () => {
       description: "Automatically identify whales, MEV bots, exchanges, and other entities with confidence scores and risk assessment.",
       image: "/feature-entity-labeling.svg",
       cta: "View Entities",
-      ctaLink: "/auth/signup"
+      ctaLink: "/waitlist"
     },
     {
       id: "real-time-alerts",
@@ -132,7 +132,7 @@ const Index = () => {
       description: "Set up custom alerts for suspicious transactions, whale movements, and compliance violations across all supported chains.",
       image: "/feature-alerts.svg",
       cta: "Set Up Alerts",
-      ctaLink: "/auth/signup"
+      ctaLink: "/waitlist"
     }
   ];
 
@@ -173,25 +173,13 @@ const Index = () => {
             </p>
             
             <div className="flex justify-center">
-              <SignedOut>
-                <SignUpButton mode="modal">
-                  <HoverBorderGradient
-                    className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 flex items-center gap-2 cursor-pointer"
-                  >
-                    Start Investigating
-                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
-                  </HoverBorderGradient>
-                </SignUpButton>
-              </SignedOut>
-              <SignedIn>
-                <HoverBorderGradient
-                  onClick={() => navigate(getAppRoute())}
-                  className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 flex items-center gap-2 cursor-pointer"
-                >
-                  Go to Dashboard
-                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
-                </HoverBorderGradient>
-              </SignedIn>
+              <HoverBorderGradient
+                onClick={() => navigate("/waitlist")}
+                className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 flex items-center gap-2 cursor-pointer"
+              >
+                Start Investigating
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+              </HoverBorderGradient>
             </div>
             
             <p className="text-sm text-neutral-400 mt-4">
@@ -254,27 +242,15 @@ const Index = () => {
                         <p className="text-base leading-relaxed text-gray-300 mb-6">
                           {feature.description}
                         </p>
-                        <SignedOut>
-                          <SignUpButton mode="modal">
-                            <button className="relative text-[#7c45eb] hover:text-[#7c45eb] transition-colors duration-200 group text-base font-medium cursor-pointer">
-                              <span className="relative">
-                                {feature.cta} →
-                                <span className="absolute bottom-0 left-0 w-0 h-px bg-[#7c45eb] transition-all duration-300 group-hover:w-full"></span>
-                              </span>
-                            </button>
-                          </SignUpButton>
-                        </SignedOut>
-                        <SignedIn>
-                          <button
-                            onClick={() => navigate(getAppRoute())}
-                            className="relative text-[#7c45eb] hover:text-[#7c45eb] transition-colors duration-200 group text-base font-medium cursor-pointer"
-                          >
-                            <span className="relative">
-                              {feature.cta} →
-                              <span className="absolute bottom-0 left-0 w-0 h-px bg-[#7c45eb] transition-all duration-300 group-hover:w-full"></span>
-                            </span>
-                          </button>
-                        </SignedIn>
+                        <button
+                          onClick={() => navigate("/waitlist")}
+                          className="relative text-[#7c45eb] hover:text-[#7c45eb] transition-colors duration-200 group text-base font-medium cursor-pointer"
+                        >
+                          <span className="relative">
+                            {feature.cta} →
+                            <span className="absolute bottom-0 left-0 w-0 h-px bg-[#7c45eb] transition-all duration-300 group-hover:w-full"></span>
+                          </span>
+                        </button>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
