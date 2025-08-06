@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { ArrowRight } from "lucide-react";
 import { SignedIn, SignedOut, SignUpButton } from "@clerk/clerk-react";
+import { getAppRoute } from "@/lib/utils";
 
 const CtaCard = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const CtaCard = () => {
             </SignedOut>
             <SignedIn>
               <HoverBorderGradient
-                onClick={() => navigate("/app")}
+                onClick={() => navigate(getAppRoute())}
                 className="text-base px-6 py-2 flex items-center gap-2 cursor-pointer"
               >
                 Go to Dashboard

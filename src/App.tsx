@@ -15,6 +15,7 @@ import SettingsPage from "./pages/app/SettingsPage";
 import ApiKeysPage from "./pages/app/ApiKeysPage";
 import ContactPage from "./pages/ContactPage";
 import PricingPage from "./pages/PricingPage";
+import WaitlistPage from "./pages/WaitlistPage";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ const App = () => (
           </Route>
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/waitlist" element={<WaitlistPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

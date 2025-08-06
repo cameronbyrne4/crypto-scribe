@@ -15,6 +15,7 @@ import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
+import { getAppRoute } from "@/lib/utils";
 import { 
   Search, 
   Shield, 
@@ -184,7 +185,7 @@ const Index = () => {
               </SignedOut>
               <SignedIn>
                 <HoverBorderGradient
-                  onClick={() => navigate("/app")}
+                  onClick={() => navigate(getAppRoute())}
                   className="text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 flex items-center gap-2 cursor-pointer"
                 >
                   Go to Dashboard
@@ -265,7 +266,7 @@ const Index = () => {
                         </SignedOut>
                         <SignedIn>
                           <button
-                            onClick={() => navigate("/app")}
+                            onClick={() => navigate(getAppRoute())}
                             className="relative text-[#7c45eb] hover:text-[#7c45eb] transition-colors duration-200 group text-base font-medium cursor-pointer"
                           >
                             <span className="relative">

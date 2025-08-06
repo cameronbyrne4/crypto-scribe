@@ -14,6 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Switch } from "@/components/ui/switch";
 import Footer from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
+import { getAppRoute } from "@/lib/utils";
 import { 
   CheckCircle, 
   Zap, 
@@ -275,7 +276,7 @@ const PricingPage = () => {
                               </SignedOut>
                               <SignedIn>
                                 <GradientButton
-                                  onClick={() => navigate("/app")}
+                                  onClick={() => navigate(getAppRoute())}
                                   variant={plan.isPopular ? "primary" : "secondary"}
                                   className="w-full cursor-pointer"
                                   disabled={isComingSoon}

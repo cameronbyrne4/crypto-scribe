@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, getAppRoute } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Database } from "lucide-react";
@@ -222,7 +222,7 @@ export const UnifiedNavbar = ({
                 </SignUpButton>
               </SignedOut>
               <SignedIn>
-                <ShrinkingNavbarButton href="/app" variant="secondary">
+                <ShrinkingNavbarButton href={getAppRoute()} variant="secondary">
                   Try Nous
                 </ShrinkingNavbarButton>
                 <UserButton afterSignOutUrl="/" />
@@ -276,7 +276,7 @@ export const UnifiedNavbar = ({
           </SignedOut>
           <SignedIn>
             <ShrinkingNavbarButton
-              href="/app"
+              href={getAppRoute()}
               variant="secondary"
               className="w-fit"
             >
