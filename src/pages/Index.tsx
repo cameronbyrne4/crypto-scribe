@@ -106,32 +106,32 @@ const Index = () => {
       id: "natural-language",
       title: "Natural Language Queries",
       description: "Ask complex blockchain questions in plain English and get instant, accurate answers without any technical expertise.",
-      image: "/feature-natural-language.svg",
+      image: "/features/new-feature-NL-search.png",
       cta: "Try a Query",
-      ctaLink: "/waitlist"
-    },
-    {
-      id: "cross-chain",
-      title: "Cross-Chain Tracking",
-      description: "Trace transactions across multiple blockchains with complete flow visibility and entity identification.",
-      image: "/feature-cross-chain.svg",
-      cta: "Explore Networks",
       ctaLink: "/waitlist"
     },
     {
       id: "entity-labeling",
       title: "Entity Labeling",
       description: "Automatically identify whales, MEV bots, exchanges, and other entities with confidence scores and risk assessment.",
-      image: "/feature-entity-labeling.svg",
+      image: "/features/new-feature-risk-analysis.png",
       cta: "View Entities",
       ctaLink: "/waitlist"
     },
     {
-      id: "real-time-alerts",
-      title: "Real-Time Alerts",
-      description: "Set up custom alerts for suspicious transactions, whale movements, and compliance violations across all supported chains.",
-      image: "/feature-alerts.svg",
-      cta: "Set Up Alerts",
+      id: "cross-chain-flow",
+      title: "Cross-Chain Flow",
+      description: "Trace transactions across multiple blockchains with complete flow visibility and network diagram visualization.",
+      image: "/features/new-feature-cross-chain-flow.png",
+      cta: "Explore Networks",
+      ctaLink: "/waitlist"
+    },
+    {
+      id: "transaction-analysis",
+      title: "Transaction Analysis",
+      description: "Explain any transaction with detailed breakdowns, confidence scores, and comprehensive risk assessments.",
+      image: "/features/new-feature-transaction-analysis.png",
+      cta: "Analyze Transaction",
       ctaLink: "/waitlist"
     }
   ];
@@ -204,14 +204,14 @@ const Index = () => {
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-stretch">
             {/* Left side - Feature list */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="space-y-1"
+              className="space-y-1 lg:col-span-1"
             >
               <Accordion 
                 type="single" 
@@ -259,7 +259,7 @@ const Index = () => {
             </motion.div>
 
             {/* Right side - Feature preview */}
-            <div className="relative h-full">
+            <div className="relative h-full lg:col-span-2">
               {/* Mountain background image */}
               <div className="absolute inset-0  overflow-hidden border border-white/10">
                 <img 
@@ -281,22 +281,20 @@ const Index = () => {
                     className="absolute inset-0 flex items-center justify-center"
                   >
                     {/* Image with wide blurred border */}
-                    <div className="relative max-w-md mx-auto">
+                    <div className="relative max-w-2xl mx-auto">
                       {/* White glow effect */}
-                      <div className="absolute -inset-3 bg-white/40 rounded-3xl blur-xl opacity-100" />
+                      <div className="absolute -inset-2 bg-white/40 rounded-3xl blur-lg opacity-100" />
                       
                       {/* White transparent border outline */}
-                      <div className="absolute -inset-3 bg-white/15 rounded-2xl" />
+                      <div className="absolute -inset-2 bg-white/15 rounded-2xl" />
                       
                       {/* Image container */}
-                      <div className="relative rounded-xl overflow-hidden bg-black/40 backdrop-blur-sm border border-white/40">
-                        <div className="aspect-video flex items-center justify-center">
-                          <img 
-                            src={featureSections.find(f => f.id === selectedFeature)?.image || "/placeholder.svg"} 
-                            alt={featureSections.find(f => f.id === selectedFeature)?.title}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
+                      <div className="relative rounded-xl overflow-hidden bg-black/40 backdrop-blur-sm border border-white/40 h-[350px]">
+                        <img 
+                          src={featureSections.find(f => f.id === selectedFeature)?.image || "/placeholder.svg"} 
+                          alt={featureSections.find(f => f.id === selectedFeature)?.title}
+                          className="w-auto h-full object-contain"
+                        />
                       </div>
                     </div>
                   </motion.div>

@@ -37,7 +37,7 @@ export const ShrinkingNavBody = ({ children, className }: { children: React.Reac
   return (
     <div
       className={cn(
-        "relative z-50 flex w-full flex-row items-center px-6 py-4 lg:px-8",
+        "relative z-50 flex w-full flex-row items-center px-5 py-3 lg:px-7",
         "bg-black/40 backdrop-blur-md border-b border-white/10",
         "max-w-8xl mx-auto",
         className,
@@ -52,14 +52,14 @@ export const ShrinkingNavItems = ({ items, className, onItemClick }: NavItemsPro
   return (
     <div
       className={cn(
-        "flex flex-row items-center justify-center space-x-8 text-lg font-medium",
+        "flex flex-row items-center justify-center space-x-7 text-base font-medium",
         className,
       )}
     >
       {items.map((item, idx) => (
         <a
           onClick={onItemClick}
-          className="relative px-4 py-2 text-lg text-gray-300 hover:text-white transition-colors duration-200"
+          className="relative px-3 py-1.5 text-base text-gray-300 hover:text-white transition-colors duration-200"
           key={`link-${idx}`}
           href={item.link}
         >
@@ -89,7 +89,7 @@ export const ShrinkingMobileNavMenu = ({
             className,
           )}
         >
-          <div className="px-6 py-6 space-y-4">
+          <div className="px-5 py-5 space-y-3">
             {children}
           </div>
         </motion.div>
@@ -107,13 +107,13 @@ export const ShrinkingMobileNavToggle = ({
 }) => {
   return (
     <button
-      className="lg:hidden rounded-lg p-2 hover:bg-gray-800 transition-colors"
+      className="lg:hidden rounded-lg p-1.5 hover:bg-gray-800 transition-colors"
       onClick={onClick}
     >
       {isOpen ? (
-        <IconX className="h-6 w-6 text-gray-300" />
+        <IconX className="h-5 w-5 text-gray-300" />
       ) : (
-        <IconMenu2 className="h-6 w-6 text-gray-300" />
+        <IconMenu2 className="h-5 w-5 text-gray-300" />
       )}
     </button>
   );
@@ -123,13 +123,13 @@ export const ShrinkingNavbarLogo = () => {
   return (
     <a
       href="/"
-      className="relative z-20 flex items-center space-x-2 px-2 py-1 text-lg font-normal"
+      className="relative z-20 flex items-center space-x-1.5 px-1.5 py-0.5 text-base font-normal"
     >
       <div className="relative">
         <img 
           src="/nous-logo.svg" 
           alt="Nous Logo" 
-          className="w-8 h-8"
+          className="w-7 h-7"
         />
       </div>
       <span className="font-bold text-white">Nous</span>
@@ -156,7 +156,7 @@ export const ShrinkingNavbarButton = ({
   | React.ComponentPropsWithoutRef<"a">
   | React.ComponentPropsWithoutRef<"button">
 )) => {
-  const baseStyles = "px-4 py-2 rounded-lg text-lg font-medium transition-all duration-200";
+  const baseStyles = "px-3 py-1.5 rounded-lg text-base font-medium transition-all duration-200";
 
   const variantStyles = {
     primary: "bg-gradient-primary text-white hover:opacity-90 shadow-lg",
@@ -205,9 +205,9 @@ export const UnifiedNavbar = ({
           </div>
           
           {/* Right: Action Buttons */}
-          <div className="flex justify-end items-center gap-4">
+          <div className="flex justify-end items-center gap-3">
             {/* Desktop Action Buttons */}
-            <div className="hidden lg:flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-3">
               <ShrinkingNavbarButton href="/waitlist" variant="secondary">
                 Join Waitlist
               </ShrinkingNavbarButton>
@@ -232,13 +232,13 @@ export const UnifiedNavbar = ({
             key={`mobile-link-${idx}`}
             href={item.link}
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block text-lg text-gray-300 hover:text-white transition-colors duration-200 py-2"
+            className="block text-base text-gray-300 hover:text-white transition-colors duration-200 py-1.5"
           >
             {item.name}
           </a>
         ))}
         
-        <div className="flex flex-col gap-4 pt-4 border-t border-white/10">
+        <div className="flex flex-col gap-3 pt-3 border-t border-white/10">
           <ShrinkingNavbarButton
             href="/waitlist"
             onClick={() => setIsMobileMenuOpen(false)}
