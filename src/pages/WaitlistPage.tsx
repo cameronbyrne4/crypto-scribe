@@ -1,8 +1,10 @@
 import { Waitlist } from '@clerk/clerk-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function WaitlistPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
   
   // Add class to body for CSS override
   if (typeof document !== 'undefined') {
@@ -11,8 +13,20 @@ export default function WaitlistPage() {
 
   const handleWaitlistSuccess = () => {
     console.log('✅ Successfully added to waitlist!');
+    console.log('Setting isSubmitted to true...');
     setIsSubmitted(true);
+    
+    // Redirect to landing page after 3 seconds
+    setTimeout(() => {
+      console.log('Redirecting to homepage...');
+      navigate('/');
+    }, 3000);
   };
+
+  // Debug: Log when component renders
+  useEffect(() => {
+    console.log('WaitlistPage rendered, isSubmitted:', isSubmitted);
+  }, [isSubmitted]);
 
   return (
     <div className="min-h-screen bg-black text-white flex max-w-4xl mx-auto waitlist-page">
@@ -47,15 +61,24 @@ export default function WaitlistPage() {
                     footer: "hidden"
                   }
                 }}
-                afterJoinWaitlistUrl="/waitlist"
                 onJoinWaitlist={handleWaitlistSuccess}
               />
             ) : (
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white mb-4">🎉 You're on the list!</div>
-                <div className="text-gray-300 text-base">
-                  Thanks for joining our waitlist. We'll notify you when Nous is ready.
-                </div>
+              <div className="flex items-center gap-2 text-[#7c45eb] text-sm">
+                <svg 
+                  className="w-4 h-4" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
+                  />
+                </svg>
+                <span>added to waitlist</span>
               </div>
             )}
           </div>

@@ -12,7 +12,6 @@ createRoot(document.getElementById("root")!).render(
   <ClerkProvider 
     publishableKey={PUBLISHABLE_KEY} 
     afterSignOutUrl="/"
-    waitlistUrl="/waitlist"
   >
     <App />
   </ClerkProvider>
