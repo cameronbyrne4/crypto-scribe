@@ -259,7 +259,7 @@ const Index = () => {
             </motion.div>
 
             {/* Right side - Feature preview */}
-            <div className="relative h-full lg:col-span-2">
+            <div className="relative h-full lg:col-span-2 hidden lg:block">
               {/* Mountain background image */}
               <div className="absolute inset-0  overflow-hidden border border-white/10">
                 <img 

@@ -190,14 +190,14 @@ export const UnifiedNavbar = ({
   return (
     <ShrinkingNavbar className={className}>
       <ShrinkingNavBody>
-        <div className="grid grid-cols-3 items-center w-full">
+        <div className="flex items-center justify-between w-full">
           {/* Left: Logo */}
-          <div className="flex justify-start">
+          <div className="flex items-center">
             <ShrinkingNavbarLogo />
           </div>
           
-          {/* Center: Navigation Items - Truly centered on page */}
-          <div className="hidden lg:flex justify-center">
+          {/* Center: Navigation Items - Only visible on desktop */}
+          <div className="hidden lg:flex items-center">
             <ShrinkingNavItems 
               items={navItems} 
               onItemClick={() => setIsMobileMenuOpen(false)}
@@ -205,7 +205,7 @@ export const UnifiedNavbar = ({
           </div>
           
           {/* Right: Action Buttons */}
-          <div className="flex justify-end items-center gap-3">
+          <div className="flex items-center gap-3">
             {/* Desktop Action Buttons */}
             <div className="hidden lg:flex items-center gap-3">
               <ShrinkingNavbarButton href="/waitlist" variant="secondary">
@@ -213,11 +213,13 @@ export const UnifiedNavbar = ({
               </ShrinkingNavbarButton>
             </div>
 
-            {/* Mobile Menu Toggle */}
-            <ShrinkingMobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
+            {/* Mobile Menu Toggle - Always on the right */}
+            <div className="lg:hidden">
+              <ShrinkingMobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              />
+            </div>
           </div>
         </div>
       </ShrinkingNavBody>
